@@ -1,2 +1,2 @@
 # Summer-2023
-CS3520 - Summer 2023 Northeastern University
+This is course repo for CS3520 (Programming in C++) - Summer 2023 @ Northeastern University!

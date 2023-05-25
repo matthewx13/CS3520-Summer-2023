@@ -1,34 +1,46 @@
+// practice 2(Matthew Xue - 5/25/23)
 // Program to read integers into a 3X3 matrix and display them
 // Todo: Fix bugs and makesure program works as intended.
 // for each bug fix, add a comments specifying what you fixed.
 
 // Number of errors/bugs = 10
+/* Biggest fixes
+- add const variable Size
+- change int Matrix[size + 1][size + 1]; to int Matrix[Size][Size]; 
+- syntax errors for for loops in main
+- change how the function is called in main
+- disply function change syntax of for loops
 
+*/
 #include <iostream>
 using namespace std;
-void display(double Matrix[3][3],int size); 
 
-int main(void) {
-	int size=3; 
-	int Matrix[size + 1][size + 1]; 
-	cin<<"Enter 9 elements of the matrix:"<<endl;
-	for (i = 0; i < size; i++) 
-    {
-      int j = 0;
-      for (; j < size; j++){
-        cin>>Matrix[j][i]; 
-      }
-    }
-	display(&Matrix,3);
-	return 0;
-}
+const int Size = 3; // call new variable Size
 
-void display(int Matrix[3][3], float size) { 
-	for (int i = 0; i < size , i++) {
-		for (int j = 0; j < size; i++) 
-        {
-            cout<<Matrix[i][j]<<", ";
+void display(int Matrix[Size][Size], int size); 
+
+int main() {
+    int Matrix[Size][Size]; 
+    cout << "Enter 9 elements of the matrix:" << endl; // change cin to cout
+    for (int i = 0; i < Size; i++) { // give i int
+        for (int j = 0; j < Size; j++) { // intialize j in for loop
+            cin >> Matrix[i][j];
         }
-        cout<<endl
-	}    
+    }
+    display(Matrix, Size); //change how the function is called
+    return 0;
 }
+
+void display(int Matrix[Size][Size], int size) {
+    for (int i = 0; i < size; i++) { // add semicolon
+        for (int j = 0; j < size; j++) { // change i++ to j++
+            cout << Matrix[i][j] << ", ";
+        }
+        cout << endl;
+    }
+}
+
+
+
+
+

@@ -40,6 +40,6 @@ int main() {
 
 	//Deallocating 2D array
 	for(i=0; i< N; i++)			 
-		free(d_array[i];
+		free(d_array[i]);
 	free(d_array);
 }

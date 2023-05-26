@@ -31,13 +31,13 @@ all: 3d_dynamic 3dmatrix charptr practice_1 practice_2 struct
 charptr: $(_OBJ3)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
-practice_1: $(_OBJ1)
+practice_1: $(_OBJ4)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
-practice_2: $(_OBJ2)
+practice_2: $(_OBJ5)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
-struct: $(_OBJ3)
+struct: $(_OBJ6)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
 .PHONY: clean

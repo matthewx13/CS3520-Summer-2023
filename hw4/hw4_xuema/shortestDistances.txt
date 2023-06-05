@@ -1,0 +1,8 @@
+Pendleton: 5
+Pensacola: 8
+Peoria: 3
+Phoenix: 3
+Pierre: 3
+Pittsburgh: 8
+Princeton: 10
+Pueblo: 0

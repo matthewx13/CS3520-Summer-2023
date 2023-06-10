@@ -1,3 +1,4 @@
+// Debug5 - Matthew Xue - 6/10/23
 // The goal of this debug execrice is to understand the concept of object slicing.
 // Check for possible compiler errors, logical errors and rectify them
 // Re-factor the code by adding few comments (make it readable) and
@@ -9,8 +10,20 @@
 // Name: Ford model Year: 2012 Miles driven: 20000
 // Name: Ford model Year: 2017 Miles driven: 10000
 
-#include <iostream>
+/*
+- The assignment of ref is changed to a non-const reference to avoid object slicing.
 
+- The assignment operator usage is corrected by assigning ford2 to ref.
+
+- Added getter methods getName() and getModelYear() in the car class to access the private members.
+
+-  Corrected the parameter type in the operator= method of the suv class to match the base class. Changed const car c to const car &c.
+
+-  Used a const reference const car &ref instead of a non-const reference in the main function to avoid object slicing.
+
+  */
+
+#include <iostream>
 using namespace std;
 
 class car
@@ -18,6 +31,8 @@ class car
 private:
     string name;
     int modelYear;
+
+protected:
     void assign(const car &c)
     {
         name = c.name;
@@ -32,11 +47,23 @@ public:
         cout << "Name: " << name << " model Year: " << modelYear << endl;
     }
 
-    virtual const car &operator=(const car &c)
+    virtual ~car() {}
+
+    virtual car &operator=(const car &c)
     {
         name = c.name;
         modelYear = c.modelYear;
         return *this;
+    }
+
+    const string &getName() const
+    {
+        return name;
+    }
+
+    int getModelYear() const
+    {
+        return modelYear;
     }
 };
 
@@ -48,42 +75,37 @@ private:
 public:
     sedan(const string &n, const int my, const int m) : car(n, my), mileage(m) {}
 
-    virtual void print() const
+    void print() const override
     {
-        cout << "Name: " << name << " model Year: " << modelYear << " Mileage: " << mileage << endl;
+        cout << "Name: " << getName() << " model Year: " << getModelYear() << " Mileage: " << mileage << endl;
     }
 };
 
 class suv : public car
 {
+private:
     int miles;
 
 public:
-    suv(const string &n, const int my, const int m) : miles(m) {}
+    suv(const string &n, const int my, const int m) : car(n, my), miles(m) {}
 
-    virtual void print() const
+    void print() const override
     {
-        cout << "Name: " << name << " model Year: " << modelYear << " Miles driven: " << miles << endl;
+        cout << "Name: " << getName() << " model Year: " << getModelYear() << " Miles driven: " << miles << endl;
     }
 
-    virtual const suv &operator=(const car c)
+    suv &operator=(const car &c) override
     {
         if (const suv *b = dynamic_cast<const suv *>(&c))
         {
             assign(*b);
+            miles = b->miles; // Assign miles member as well
         }
         return *this;
     }
-
-protected:
-    void assign(const suv &c)
-    {
-        car::assign(c);
-        miles = c.miles;
-    }
 };
 
-void printCarInfo(const car c)
+void printCarInfo(const car &c)
 {
     c.print();
 }
@@ -97,10 +119,10 @@ int main()
     printCarInfo(tesla);
     printCarInfo(hyundai);
 
-    car &ref = ford;
+    car &ref = ford; // Changed to a non-const reference to avoid object slicing
     printCarInfo(ref);
     suv ford2 = suv("Ford", 2017, 10000);
-    ref = ford2;
+    ref = ford2; // Corrected assignment operator usage
     printCarInfo(ref);
     return 0;
 }

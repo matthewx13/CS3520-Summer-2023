@@ -1,19 +1,32 @@
-// Debug T-1
-// Function template adds objects. The function works on any object which has '+' opertor defined.
-// Check for possible compiler errors, logical errors and rectify them
-// Re-factor the code by adding few comments (make it readable) and
-// provide list of most important fixes (in comments)
+// Debug1 - Matthew Xue - 6/10/23
+/*
 
+Added missing type declaration for the parameter 'y' in the add() function template.
+
+Changed 'U' to 'T' in the add() function template to match the template type.
+
+Fixed the capitalization of 'person' to 'Person' in the declaration of operator+ in the Person class.
+
+Added the 'const' qualifier to the parameter 'per' in the operator<< function for Person class.
+
+Fixed the assignment of values in the Person::setValues() function by using 'this->' to refer to the member variable 'age'.
+
+Corrected the assignment of 'temp.age' in the Person::operator+ function.
+
+*/
 #include <iostream>
 #include <string>
 using namespace std;
+
+
 template <class T>
-T add(T x, y)
+T add(T x, T y) // Fixed the missing type declaration for parameter 'y'
 {
-   U sum;
+   T sum; // Changed 'U' to 'T' to match the template type
    sum = x + y;
    return sum;
 }
+
 class Person
 {
    friend ostream &operator<<(ostream &, const Person &);
@@ -25,24 +38,28 @@ private:
 
 public:
    void setValues(string, string, int);
-   Person operator+(person);
+   Person operator+(Person); // Fixed the capitalization of 'person' to 'Person'
 };
-ostream &operator<<(ostream &out, Person &per)
+
+ostream &operator<<(ostream &out, const Person &per) // Added 'const' qualifier to the parameter 'per'
 {
    out << per.firstName << " " << per.lastName << " " << per.age << " years old" << endl;
+   return out; // Added the return statement
 }
+
 void Person::setValues(string last, string first, int age)
 {
    lastName = last;
    firstName = first;
-   age = age;
+   this->age = age; // Added 'this->' to clarify the assignment to the member variable
 }
+
 Person Person::operator+(Person p)
 {
    Person temp;
    temp.lastName = "of Age";
    temp.firstName = "Sum";
-   age = p.age - temp.age;
+   temp.age = p.age - age; // Fixed the assignment of 'age' to 'temp.age'
    return temp;
 }
 

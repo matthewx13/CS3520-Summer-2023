@@ -240,4 +240,4 @@ public:
   virtual void sendOrderReceipt();
 };
 
-#endif
+

@@ -1,22 +1,25 @@
-#pragma once
 
-#define WINDOW_WIDTH 100
-#define WINDOW_HEIGHT 100
+#define WELL_WIDTH 100
+#define WELL_HEIGHT 100
 
-struct GameWindow
+
+using namespace std;
+
+
+struct gamewindow_t
 {
-    int xPos;
-    int yPos;
-    int width;
-    int height;
-    char drawChar;
-    char color[3];
+  int upper_left_x;
+  int upper_left_y;
+  int width;
+  int height;
+  char draw_char;
+  char color[3];
 };
 
-typedef struct GameWindow GameWindow;
+typedef struct gamewindow_t gamewindow_t;
 
-GameWindow* init_GameWindow(int, int, int, int);
-GameWindow* changeGameWindow(int, int, int, int, GameWindow*);
+gamewindow_t *init_GameWindow(int, int, int, int);
+gamewindow_t *changeGameWindow(int upper_left_x, int upper_left_y, int width, int height, gamewindow_t *);
 
-void undraw_GameWindow(GameWindow*);
-void draw_GameWindow(GameWindow*);
+void undraw_Gamewindow(gamewindow_t *);
+void draw_Gamewindow(gamewindow_t *);

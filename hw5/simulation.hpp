@@ -1,103 +1,25 @@
-#ifndef SIMULATION_HPP
-#define SIMULATION_HPP
 
-#include <vector>
+#define WELL_WIDTH 100
+#define WELL_HEIGHT 100
 
-enum State { INIT, ALIVE, DEAD, EXIT };
 
-class Bug {
-public:
-  virtual void move(std::vector<Bug *> &bugs, bool canQueenBreed) = 0;
-  virtual void breed(std::vector<Bug *> &bugs, bool canQueenBreed) = 0;
-  virtual void die() = 0;
-  virtual bool isAlive() = 0;
-  virtual int getEnergy() = 0;
-  virtual ~Bug() {}
-};
+using namespace std;
 
-class Male : public Bug {
-public:
-  Male(int x, int y, int energy);
-  void move(std::vector<Bug *> &bugs, bool canQueenBreed);
-  void breed(std::vector<Bug *> &bugs, bool canQueenBreed);
-  void die();
-  bool isAlive();
-  int getEnergy();
 
-private:
-  int x;
-  int y;
-  int energy;
-};
-
-class Queen : public Bug {
-public:
-  Queen(int x, int y, int energy);
-  void move(std::vector<Bug *> &bugs, bool canQueenBreed);
-  void breed(std::vector<Bug *> &bugs, bool canQueenBreed);
-  void die();
-  bool isAlive();
-  int getEnergy();
-
-private:
-  int x;
-  int y;
-  int energy;
-};
-
-class Worker : public Bug {
-public:
-  Worker(int x, int y, int energy);
-  void move(std::vector<Bug *> &bugs, bool canQueenBreed);
-  void breed(std::vector<Bug *> &bugs, bool canQueenBreed);
-  void die();
-  bool isAlive();
-  int getEnergy();
-
-private:
-  int x;
-  int y;
-  int energy;
-};
-
-class Doodle : public Bug {
-public:
-  Doodle(int x, int y, int energy);
-  void move(std::vector<Bug *> &bugs, bool canQueenBreed);
-  void breed(std::vector<Bug *> &bugs, bool canQueenBreed);
-  void die();
-  bool isAlive();
-  int getEnergy();
-
-private:
-  int x;
-  int y;
-  int energy;
-};
-
-class GameWindow {
-public:
-  GameWindow(int width, int height, int x_offset, int y_offset);
-  ~GameWindow();
-  void draw(int x, int y, char c);
-  void clear();
-  void refresh();
-
-  int getWidth();
-  int getHeight();
-  int getXOffset();
-  int getYOffset();
-  WINDOW *getWindow();
-
-private:
+struct gamewindow_t
+{
+  int upper_left_x;
+  int upper_left_y;
   int width;
   int height;
-  int x_offset;
-  int y_offset;
-  WINDOW *window;
+  char draw_char;
+  char color[3];
 };
 
-void game(int numDoodle, int numQueen, int numMale, int numWorker);
-void generatePoints(int *bugX, int *bugY, int windowWidth, int windowHeight, int xOffset, int yOffset);
+typedef struct gamewindow_t gamewindow_t;
 
-#endif  // SIMULATION_HPP
+gamewindow_t *init_GameWindow(int, int, int, int);
+gamewindow_t *changeGameWindow(int upper_left_x, int upper_left_y, int width, int height, gamewindow_t *);
+
+void undraw_Gamewindow(gamewindow_t *);
+void draw_Gamewindow(gamewindow_t *);

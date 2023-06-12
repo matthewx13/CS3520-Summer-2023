@@ -36,7 +36,7 @@ void Bug::removeEatenBug(vector<Bug*>& bugs, int x, int y) {
 }
 
 void Bug::operator++(Bug& bug) {
-    ++(bug.initializedTime);
+    ++(bug.it);
 }
 
 bool Bug::compareBugs(const Bug* a, const Bug* b) {

@@ -10,51 +10,38 @@
 
 using namespace std;
 
-int main() {
-  int numDoodle;
-  int numQueen;
-  int numMale;
-  int numWorker;
-
-  cout << "Enter the number of doodlebugs, queens, male ants, and workers (in that order): " << endl;
-
+int main(void) {
+  int value;
   vector<int> nums;
 
-  for (int i = 0; i < 4; i++) {
-    int value;
+  cout << "Enter number of doodlebugs, queens, male ants, and workers (in that "
+          "order) by entering a number, then enter, then again: "
+       << endl;
 
+  for (int i = 0; i < 4; i++) {
     while (!(cin >> value) || value < 0) {
-      cout << "Invalid input. Try again: " << endl;
+      cout << "Try again, not a number or less than 0" << endl;
       cin.clear();
       cin.ignore(123, '\n');
     }
 
     nums.push_back(value);
   }
-
-  while (nums[0] + nums[1] + nums[2] + nums[3] > 1500) {
-    cout << "You entered too many bugs. Please try again." << endl;
+  while (nums.at(0) + nums.at(1) + nums.at(2) +nums.at(3) > 1500) {
+    cout<<"You gave too many bugs. try again"<<endl;
     nums.clear();
-
-    for (int i = 0; i < 4; i++) {
-      int value;
-
-      while (!(cin >> value) || value < 0) {
-        cout << "Invalid input. Try again: " << endl;
-        cin.clear();
-        cin.ignore(123, '\n');
-      }
-
-      nums.push_back(value);
+      for (int i = 0; i < 4; i++) {
+    while (!(cin >> value) || value < 0) {
+      cout << "Try again, not a number or less than 0" << endl;
+      cin.clear();
+      cin.ignore(123, '\n');
     }
+
+    nums.push_back(value);
+  }
   }
 
-  numDoodle = nums[0];
-  numQueen = nums[1];
-  numMale = nums[2];
-  numWorker = nums[3];
+  game(nums.at(0), nums.at(1), nums.at(2), nums.at(3));
 
-  game(numDoodle, numQueen, numMale, numWorker);
-
-  return 0;
+  return (0);
 }

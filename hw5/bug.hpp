@@ -9,45 +9,72 @@
 #define BUG_HPP
 
 using namespace std;
-
+// forward decleration from stackoverflow lol this is cool
 class Ant;
 class DoodleBug;
 class Queen;
 class Worker;
 
+// notes: how do i passs a vector into function?
+// how do i want to handle the set?
+
 class Bug {
+
 protected:
   int x;
   int y;
-  int initializedTime;
+  int it;
   char symbol;
 
 public:
-  Bug(int x, int y, int initializedTime);
+  Bug(int x, int y, int initalizedTime);
+
   virtual ~Bug(){};
 
-  virtual void move(vector<pair<int, int>> positions) = 0;
-  virtual bool starve() const = 0;
-  virtual vector<pair<int, int>> canMove(vector<Bug*>& bugs, int x, int y) const = 0;
-  virtual bool canBreed() const = 0;
-  virtual void breed(vector<Bug*>& bugs) const = 0;
+  // these are different for each subclass
 
-  void operator++(Bug& bug);
+  // moves the bug
+  virtual void move(vector<pair<int, int>> positions) = 0;
+  // has the bug starved? different for different subtypes
+  virtual bool starve() const = 0;
+  // true if the bug can move, different for each subclass
+  virtual vector<pair<int, int>> canMove(vector<Bug*> &bugs, int x, int y) const = 0;
+
+  // can this bug breed right now?
+ virtual bool canBreed() const = 0;
+
+// breed this bug
+virtual void breed(vector<Bug> &bugs) const  = 0;
+
+
+// incremeneets the time
+  static void operator++(Bug& bug);
+
+
   static bool compareBugs(const Bug* a, const Bug* b);
+
+// Insert the new word into the vector
   static void addBug(vector<Bug*>& bugs, const Bug* newBug);
 
-  static bool bugExists(const vector<Bug*>& bugs, int x, int y);
-  static void drawBug(Bug* bug);
-  static void removeEatenBug(vector<Bug*>& bugs, int x, int y);
+  /// these three are same implementation
+
+  // does a bug exist at the givn coords?
+  static bool bug_exists(vector<Bug*> &bugs, int x, int y);
+  /// draws a bug
+  static void draw_Bug(Bug *bug);
+  // removes dead or eaten bugs
+  static void remove_eaten_bug(vector<Bug*> &bugs, int x, int y);
 
   int getX() const;
   int getY() const;
   char getSymbol() const;
-  int getInitializedTime() const;
+  int getInitalizedTime() const;
   void setX(int x);
   void setY(int y);
 
-  static void displayBugInfo(int count, int x, int y, Bug* bug);
+
+  static void display_bug_info(int x, int y);
+
 };
 
 class DoodleBug : public Bug {
@@ -55,14 +82,22 @@ protected:
   int timeSinceEating;
 
 public:
-  DoodleBug(int x, int y, int initializedTime);
+  DoodleBug(int x, int y, int it);
   virtual ~DoodleBug();
 
+  // moves the bug
   virtual void move(vector<pair<int, int>> positions) override;
+  // has the bug starved? different for different subtypes
   virtual bool starve() const override;
-  virtual vector<pair<int, int>> canMove(vector<Bug*>& bugs, int x, int y) const override;
-  virtual bool canBreed() const override;
-  virtual void breed(vector<Bug*>& bugs) const override;
+  // true if the bug can move, different for each subclass
+  virtual vector<pair<int, int>> canMove(vector<Bug*> &bugs, int x, int y) const override;
+
+   // can this bug breed right now?
+ virtual bool canBreed() const override;
+
+// breed this bug
+virtual void breed(vector<Bug*> &bugs) const override;
+
 };
 
 class Ant : public Bug {
@@ -83,12 +118,14 @@ public:
 
   virtual void move(vector<pair<int, int>> positions) override;
   virtual bool starve() const override;
-  virtual vector<pair<int, int>> canMove(vector<Bug*>& bugs, int x, int y) const override;
+  virtual vector<pair<int, int>> canMove(vector<Bug*> &bugs, int x, int y) const override;
   virtual bool canBreed() const override;
-  virtual void breed(vector<Bug*>& bugs) const override;
+  virtual void breed(vector<Bug*> &bugs) const override;
 
+  // Queen specific behavior
   bool canMate() const;
   bool canMove() const;
+
 };
 
 class Worker : public Ant {
@@ -96,22 +133,27 @@ protected:
   int timeSinceMoved;
 
 public:
-  Worker(int x, int y, int initializedTime);
+  Worker(int x, int y, int it);
   virtual ~Worker();
 
+  // female and male work the same here.
   virtual void move(vector<pair<int, int>> positions) override;
   virtual bool starve() const override;
-  virtual vector<pair<int, int>> canMove(vector<Bug*>& bugs, int x, int y) const override;
+  virtual vector<pair<int, int>> canMove(vector<Bug*> &bugs, int x, int y) const override;
   virtual bool canBreed() const override;
-  virtual void breed(vector<Bug*>& bugs) const override;
+  virtual void breed(vector<Bug*> &bugs) const override;
 };
 
 class MaleAnt : public Worker {
 public:
-  MaleAnt(int x, int y, int initializedTime);
+  MaleAnt(int x, int y, int it);
   virtual ~MaleAnt();
   virtual bool canBreed() const override;
-  virtual void breed(vector<Bug*>& bugs) const override;
+  virtual void breed(vector<Bug*> &bugs) const override;
 };
+
+
+
+
 
 #endif

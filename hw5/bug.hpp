@@ -32,11 +32,11 @@ public:
   virtual bool canBreed() const = 0;
   virtual void breed(vector<Bug*>& bugs) const = 0;
 
-  static void operator++(Bug& bug);
+  void operator++(Bug& bug);
   static bool compareBugs(const Bug* a, const Bug* b);
   static void addBug(vector<Bug*>& bugs, const Bug* newBug);
 
-  static bool bugExists(vector<Bug*>& bugs, int x, int y);
+  static bool bugExists(const vector<Bug*>& bugs, int x, int y);
   static void drawBug(Bug* bug);
   static void removeEatenBug(vector<Bug*>& bugs, int x, int y);
 

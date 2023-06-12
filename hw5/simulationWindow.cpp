@@ -1,85 +1,104 @@
+
 #include <cstdlib>
 #include <ncurses.h>
 #include "simulationWindow.hpp"
 
-GameWindow* init_GameWindow(int x, int y, int w, int h)
+gamewindow_t *init_GameWindow(int upper_left_x, int upper_left_y, int width, int height)
 {
-    GameWindow* window = (GameWindow*)malloc(sizeof(GameWindow));
-    window->xPos = x;
-    window->yPos = y;
-    window->width = w;
-    window->height = h;
-    window->drawChar = '*';
-    window->color[0] = 0;
-    window->color[1] = 0;
-    window->color[2] = 255;
-    return window;
+	gamewindow_t *g;
+	g = (gamewindow_t *) malloc(sizeof(gamewindow_t));
+	g->upper_left_x = upper_left_x;
+	g->upper_left_y = upper_left_y;
+	g->width = width;
+	g->height = height;
+	g->draw_char = '*';
+	g->color[0] = 0;
+	g->color[1] = 0;
+	g->color[2] = 255;
+	return (g);
 }
 
-void draw_GameWindow(GameWindow* window)
+void draw_Gamewindow(gamewindow_t *r)
 {
-    int row, col;
+	
+	int row_counter, column_counter;
 
-    // Draw top of window
-    for (col = window->xPos; col <= (window->xPos + window->width); col++) {
-        mvprintw(window->yPos, col, "%c", window->drawChar);
-    }
+	// Draw Top of room
+	for (row_counter = r->upper_left_x;
+		 row_counter <= (r->upper_left_x + r->width);
+		 row_counter++) {
+		mvprintw(r->upper_left_y, row_counter, "%c", r->draw_char);
+	}
 
-    // Draw left side of window
-    for (row = window->yPos; row <= (window->yPos + window->height); row++) {
-        mvprintw(row, window->xPos, "%c", window->drawChar);
-    }
+	// Draw left side of room
+	for (column_counter = r->upper_left_y;
+		 column_counter <= (r->upper_left_y + r->height);
+		 column_counter++) {
+		mvprintw(column_counter, r->upper_left_x, "%c", r->draw_char);
+	}
 
-    // Draw right side of window
-    for (row = window->yPos; row <= (window->yPos + window->height); row++) {
-        mvprintw(row, (window->xPos + window->width), "%c", window->drawChar);
-    }
+	// Draw right side of room
+	for (column_counter = r->upper_left_y;
+		 column_counter <= (r->upper_left_y + r->height);
+		 column_counter++) {
+		mvprintw(column_counter, (r->upper_left_x + r->width), "%c", r->draw_char);
+	}
 
-    // Draw bottom of window
-    for (col = window->xPos; col <= (window->xPos + window->width); col++) {
-        mvprintw(window->yPos + window->height, col, "%c", window->drawChar);
-    }
+	// Draw Bottom of room
+	for (row_counter = r->upper_left_x;
+		 row_counter <= (r->upper_left_x + r->width);
+		 row_counter++) {
+		mvprintw(r->upper_left_y + r->height, row_counter, "%c", r->draw_char);
+	}
 }
 
-GameWindow* changeGameWindow(int x, int y, int w, int h, GameWindow* window)
+gamewindow_t *changeGameWindow(int upper_left_x, int upper_left_y, int width, int height, gamewindow_t *r)
 {
-    window->xPos = x;
-    window->yPos = y;
+	r->upper_left_x = upper_left_x;
+	r->upper_left_y = upper_left_y;
 
-    if (w < 10)
-        window->width = 10;
-    else
-        window->width = w;
+	if (width < 10)
+		r->width = 10;
+	else
+		r->width = width;
 
-    if (h < 10)
-        window->height = 10;
-    else
-        window->height = h;
+	if (height < 10)
+		r->height = 10;
+	else
+		r->height = height;
 
-    return window;
+	return (r);
 }
 
-void undraw_GameWindow(GameWindow* window)
+void undraw_Gamewindow(gamewindow_t *r)
 {
-    int row, col;
+	int row_counter, column_counter;
 
-    // Undraw top of window
-    for (col = window->xPos; col <= (window->xPos + window->width); col++) {
-        mvprintw(window->yPos, col, " ");
-    }
+	// Undraw Top of room
+	for (row_counter = r->upper_left_x;
+		 row_counter <= (r->upper_left_x + r->width);
+		 row_counter++) {
+		mvprintw(r->upper_left_y, row_counter, " ");
+	}
 
-    // Undraw left side of window
-    for (row = window->yPos; row <= (window->yPos + window->height); row++) {
-        mvprintw(row, window->xPos, " ");
-    }
+	// Undraw left side of room
+	for (column_counter = r->upper_left_y;
+		 column_counter<=(r->upper_left_y + r->height);
+		 column_counter++) {
+		mvprintw(column_counter, r->upper_left_x, " ");
+	}
 
-    // Undraw right side of window
-    for (row = window->yPos; row <= (window->yPos + window->height); row++) {
-        mvprintw(row, (window->xPos + window->width), " ");
-    }
+	// Undraw right side of room
+	for (column_counter = r->upper_left_y;
+		 column_counter <= (r->upper_left_y + r->height);
+		 column_counter++) {
+		mvprintw(column_counter, (r->upper_left_x + r->width), " ");
+	}
 
-    // Undraw bottom of window
-    for (col = window->xPos; col <= (window->xPos + window->width); col++) {
-        mvprintw(window->yPos + window->height, col, " ");
-    }
+	// Undraw Bottom of room
+	for (row_counter = r->upper_left_x;
+		 row_counter <= (r->upper_left_x + r->width);
+		 row_counter++) {
+		mvprintw(r->upper_left_y + r->height, row_counter, " ");
+	}
 }

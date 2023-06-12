@@ -4,10 +4,10 @@
 
 // Bug methods
 Bug::Bug(int x, int y, int initializedTime)
-    : x(x), y(y), initializedTime(initializedTime), symbol('?') {}
+    : x(x), y(y), it(initializedTime), symbol('?') {}
 
-bool Bug::bugExists(const vector<Bug*>& bugs, int x, int y) {
-    for (const Bug* bug : bugs) {
+bool Bug::bug_exists(vector<Bug*>& bugs, int x, int y) {
+     for (Bug& bug : bugs) {
         if (bug->getX() == x && bug->getY() == y) {
             return true;
         }
@@ -15,45 +15,57 @@ bool Bug::bugExists(const vector<Bug*>& bugs, int x, int y) {
     return false;
 }
 
-void Bug::drawBug(Bug* bug) {
+
+  // draws the bug  on the board
+void Bug::draw_Bug(Bug* bug) 
+
+{
     mvprintw(bug->getY(), bug->getX(), "%c", bug->getSymbol());
 }
 
-void Bug::displayBugInfo(int count, int x, int y, Bug* bug) {
-    mvprintw(x, y, "[%i] Bug: x %i, y %i, it %i, s %c ", count, bug->getX(),
-             bug->getY(), bug->getInitializedTime(), bug->getSymbol());
+
+void Bug::display_bug_info(int count, int x, int y, Bug* bug) {
+     mvprintw(x, y,
+                 "[%i] Bug: x %i, y %i, it %i, s %c ", count, bug->getX(),
+                 bug->getY(), bug->getInitalizedTime(), bug->getSymbol());
 }
 
-void Bug::removeEatenBug(vector<Bug*>& bugs, int x, int y) {
-    for (auto it = bugs.begin(); it != bugs.end();) {
+
+void Bug::remove_eaten_bug(vector<Bug*>& bugs, int x, int y) {
+ for (auto it = bugs.begin(); it != bugs.end(); ) {
         if ((*it)->getX() == x && (*it)->getY() == y) {
             delete *it;
-            it = bugs.erase(it);
+             it = bugs.erase(it);
         } else {
             ++it;
         }
     }
 }
 
+// used to sort
 void Bug::operator++(Bug& bug) {
     ++(bug.it);
 }
 
-bool Bug::compareBugs(const Bug* a, const Bug* b) {
-    const string order = "XQow";
-    auto orderA = order.find(a->getSymbol());
-    auto orderB = order.find(b->getSymbol());
-    return orderA < orderB;
+// Compare the indexes of the order 
+bool Bug::compareBugs(const Bug* a, const  Bug* b) {
+  const string order = "XQow";
+  auto orderA = order.find(a->getSymbol());
+  auto orderB = order.find(b->getSymbol());
+
+  return orderA < orderB;
 }
 
+
 void Bug::addBug(vector<Bug*>& bugs, Bug* newBug) {
-    auto it = lower_bound(bugs.begin(), bugs.end(), newBug, compareBugs);
-    bugs.insert(it, newBug);
+  auto it = lower_bound(bugs.begin(), bugs.end(), newBug, compareBugs);
+  bugs.insert(it, newBug);
 }
 
 char Bug::getSymbol() const {
     return symbol;
 }
+
 
 int Bug::getX() const {
     return x;
@@ -63,8 +75,8 @@ int Bug::getY() const {
     return y;
 }
 
-int Bug::getInitializedTime() const {
-    return initializedTime;
+int Bug::getInitalizedTime() const {
+    return it;
 }
 
 void Bug::setX(int x) {
@@ -76,41 +88,41 @@ void Bug::setY(int y) {
 }
 
 // DoodleBug methods
-DoodleBug::DoodleBug(int x, int y, int initializedTime)
-    : Bug(x, y, initializedTime) {
+DoodleBug:: DoodleBug(int x, int y, int it) : Bug(x, y, it) {
     symbol = 'X';
     timeSinceEating = 0;
-}
-
+  };
 DoodleBug::~DoodleBug() {}
 
+
+//----------------------------------------
 void DoodleBug::move(vector<pair<int, int>> positions) {
-    // TODO: Implement DoodleBug move logic
-}
 
+}
+//----------------------------------------
 bool DoodleBug::starve() const {
-    // TODO: Implement DoodleBug starve logic
+    // TODO
     return false;
 }
-
+//----------------------------------------
 vector<pair<int, int>> DoodleBug::canMove(vector<Bug*>& bugs, int x, int y) const {
-    // TODO: Implement DoodleBug canMove logic
+    // TODO
     return false;
 }
-
-bool DoodleBug::canBreed() const {
-    return (initializedTime > 0 && initializedTime % 10 == 0);
+//----------------------------------------
+bool DoodleBug::canBreed() const override {
+     return (it > 0 && it % 10 == 0);
+}
+//----------------------------------------
+void DoodleBug::breed(vector<Bug*>& bugs) const override {
+    // TODO
 }
 
-void DoodleBug::breed(vector<Bug*>& bugs) const {
-    // TODO: Implement DoodleBug breed logic
-}
 
 // Ant methods
-Ant::Ant(int x, int y, int lifetime) : Bug(x, y, lifetime) {
+Ant:: Ant(int x, int y, int lifetime) : Bug(x, y, lifetime) {
     symbol = 'a';
-}
-
+};
 Ant::~Ant() {}
 
 // Queen methods
@@ -119,86 +131,86 @@ Queen::Queen(int x, int y, int lifetime) : Ant(x, y, lifetime) {
     timeSinceMadeQueen = 0;
     timeSinceLayedEggs = 0;
     timeSinceMated = 0;
-}
-
+  };
 Queen::~Queen() {}
-
+//----------------------------------------
 void Queen::move(vector<pair<int, int>> positions) {
-    // TODO: Implement Queen move logic
+    // TODO
 }
-
+//----------------------------------------
 bool Queen::starve() const {
-    // TODO: Implement Queen starve logic
+    // TODO
     return false;
 }
-
+//----------------------------------------
 vector<pair<int, int>> Queen::canMove(vector<Bug*>& bugs, int x, int y) const {
-    // TODO: Implement Queen canMove logic
+    // TODO
     return false;
 }
-
+//----------------------------------------
 bool Queen::canMate() const {
-    // TODO: Implement Queen canMate logic
+    // TODO
     return false;
 }
-
+//----------------------------------------
 bool Queen::canMove() const {
-    // TODO: Implement Queen canMove logic
+    // TODO
     return false;
 }
-
-bool Queen::canBreed() const {
-    // TODO: Implement Queen canBreed logic
+//----------------------------------------
+bool Queen::canBreed() const override {
+    // TODO
     return false;
 }
-
-void Queen::breed(vector<Bug*>& bugs) const {
-    // TODO: Implement Queen breed logic
+//----------------------------------------
+void Queen::breed(vector<Bug*>& bugs) const override {
+    // TODO
 }
 
 // Worker methods
-Worker::Worker(int x, int y, int initializedTime) : Ant(x, y, initializedTime) {
+Worker::Worker(int x, int y, int it) : Ant(x, y, it) {
     symbol = 'w';
     timeSinceMoved = 0;
-}
+  };
 
 Worker::~Worker() {}
-
+//----------------------------------------
 void Worker::move(vector<pair<int, int>> positions) {
-    // TODO: Implement Worker move logic
+    // TODO
 }
-
+//----------------------------------------
 bool Worker::starve() const {
-    // TODO: Implement Worker starve logic
+    // TODO
     return false;
 }
-
+//----------------------------------------
 vector<pair<int, int>> Worker::canMove(vector<Bug*>& bugs, int x, int y) const {
-    // TODO: Implement Worker canMove logic
+    // TODO
     return false;
 }
 
-bool Worker::canBreed() const {
-    // TODO: Implement Worker canBreed logic
+//----------------------------------------
+bool Worker::canBreed() const override {
+    // TODO
     return false;
 }
-
-void Worker::breed(vector<Bug*>& bugs) const {
-    // TODO: Implement Worker breed logic
+//----------------------------------------
+void Worker::breed(vector<Bug*>& bugs) const override {
+    // TODO
 }
+
 
 // MaleAnt methods
-MaleAnt::MaleAnt(int x, int y, int initializedTime) : Worker(x, y, initializedTime) {
-    symbol = 'o';
-}
-
-bool MaleAnt::canBreed() const {
-    // TODO: Implement MaleAnt canBreed logic
+MaleAnt::MaleAnt(int x, int y, int it) : Worker(x, y, it) { symbol = 'o'; };
+//----------------------------------------
+bool MaleAnt::canBreed() const override {
+    // TODO
     return false;
 }
-
-void MaleAnt::breed(vector<Bug*>& bugs) const {
-    // TODO: Implement MaleAnt breed logic
+//----------------------------------------
+void MaleAnt::breed(vector<Bug*>& bugs) const override {
+    // TODO
 }
+
 
 MaleAnt::~MaleAnt() {}

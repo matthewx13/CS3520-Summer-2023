@@ -1,14 +1,17 @@
-CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Wextra -Werror -pthread
-TARGET = fibonacci
 
-all: $(TARGET)
+all: main
 
-$(TARGET): fibonacci.o
-	$(CXX) $(CXXFLAGS) -o $(TARGET) fibonacci_threads.o
+CXX = clang++
+override CXXFLAGS += -g -Wno- -std=c++11
 
-fibonacci_threads.o: fibonacci.cpp
-	$(CXX) $(CXXFLAGS) -c fibonacci_threads.cpp
+SRCS = $(shell find . -name '.ccls-cache' -type d -prune -o -type f -name '*.cpp' -print | sed -e 's/ /\\ /g')
+HEADERS = $(shell find . -name '.ccls-cache' -type d -prune -o -type f -name '*.h' -print)
+
+main: $(SRCS) $(HEADERS)
+	$(CXX) $(CXXFLAGS) $(SRCS) -o "$@"
+
+main-debug: $(SRCS) $(HEADERS)
+	$(CXX) $(CXXFLAGS) -O0 $(SRCS) -o "$@"
 
 clean:
-	rm -f $(TARGET) *.o
+	rm -f main main-debug

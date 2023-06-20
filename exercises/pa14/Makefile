@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall -Wextra -Werror -pthread
+CXXFLAGS = -std=c++17 -Wall -Wextra -Werror -pthread
 TARGET = fibonacci
 
 all: $(TARGET)

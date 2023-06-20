@@ -4,10 +4,10 @@ TARGET = fibonacci
 
 all: $(TARGET)
 
-$(TARGET): fibonacci
+$(TARGET): fibonacci.o
 	$(CXX) $(CXXFLAGS) -o $(TARGET) fibonacci_threads.o
 
-fibonacci_threads.o: fibonacci_threads.cpp
+fibonacci_threads.o: fibonacci.cpp
 	$(CXX) $(CXXFLAGS) -c fibonacci_threads.cpp
 
 clean:

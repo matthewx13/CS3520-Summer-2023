@@ -119,9 +119,8 @@ void World::remove_organism(Organism *organism)
     }
 }
 
-Organism *World::get_organism(int x, int y)
-{
-    return grid.at(x).at(y);
+Organism* World::get_organism(int x, int y) {
+    return grid[x][y];
 }
 
 void World::move_organisms()

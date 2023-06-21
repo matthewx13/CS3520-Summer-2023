@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall -Wextra
+CXXFLAGS = -std=c++11
 LDLIBS = -lncurses
 
 SRC = world.cpp organism.cpp ant.cpp queen_ant.cpp male_female_ant.cpp doodlebug.cpp main.cpp

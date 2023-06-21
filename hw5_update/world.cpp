@@ -77,6 +77,11 @@ bool World::run_simulation(int steps) {
         }
     }
 
+    user_stopped = true;
+    endwin(); // End ncurses
+    return user_stopped;
+}
+
 void World::add_organism(Organism *organism)
 {
     int x = organism->get_x();

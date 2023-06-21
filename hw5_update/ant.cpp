@@ -105,7 +105,7 @@ void Ant::move(World* world) {
 }
 
 void Ant::breed(World* world) {
-    return; // Ants do not breed
+    return; 
 }
 
 void Ant::starve(World* world) {

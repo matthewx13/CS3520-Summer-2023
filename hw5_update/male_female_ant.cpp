@@ -13,5 +13,5 @@ WorkerAnt::WorkerAnt(int x, int y) : Ant(x, y) {}
 WorkerAnt::~WorkerAnt() {}
 
 char WorkerAnt::get_symbol() const {
-    return 'o';
+    return 'w';
 }

@@ -1,5 +1,4 @@
-#include "male_ant.h"
-#include "worker_ant.h"
+#include "male_female_ant.h"
 
 MaleAnt::MaleAnt(int x, int y) : Ant(x, y) {}
 

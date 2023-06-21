@@ -1,16 +1,21 @@
-all: main
+CXX = g++
+CXXFLAGS = -std=c++11 -Wall -Wextra
+LDLIBS = -lncurses
 
-CXX = clang++
-override CXXFLAGS += -g -Wno- -std=c++11
+SRC = world.cpp organism.cpp ant.cpp queen_ant.cpp worker_ant.cpp male_ant.cpp doodlebug.cpp main.cpp
+OBJ = $(SRC:.cpp=.o)
+EXEC = simulation
 
-SRCS = $(shell find . -name '.ccls-cache' -type d -prune -o -type f -name '*.cpp' -print | sed -e 's/ /\\ /g')
-HEADERS = $(shell find . -name '.ccls-cache' -type d -prune -o -type f -name '*.h' -print)
+all: $(EXEC)
 
-main: $(SRCS) $(HEADERS)
-	$(CXX) $(CXXFLAGS) $(SRCS) -o "$@"
+$(EXEC): $(OBJ)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS)
 
-main-debug: $(SRCS) $(HEADERS)
-	$(CXX) $(CXXFLAGS) -O0 $(SRCS) -o "$@"
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -f main main-debug
+	rm -f $(OBJ) $(EXEC)
+
+run: $(EXEC)
+	TERM=xterm-256color ./$(EXEC)

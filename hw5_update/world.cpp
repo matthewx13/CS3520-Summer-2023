@@ -59,33 +59,23 @@ void World::initialize(int doodlebugs, int queen_ants, int worker_ants, int male
     add_organisms<MaleAnt>(male_ants, this);
 }
 
-bool World::run_simulation(int steps)
-{
-    initscr();   // Start ncurses
-    curs_set(0);
-    timeout(100); // 100ms delay
+bool World::run_simulation(int steps) {
+    initscr(); // Initialize ncurses
+    curs_set(0); // Hide the cursor
+    timeout(100); // 
     bool user_stopped = false;
 
-    for (int i = 0; i < steps && !user_stopped; i++)
-    {
+    for (int i = 0; i < steps && !user_stopped; i++) {
         std::cout << "Step " << i << std::endl;
-
         move_organisms();
         breed_organisms();
         starve_organisms();
         display_world();
-
-        int ch = getch(); // Quit program if 'q' is pressed
-        if (tolower(ch) == 'q')
-        {
+        int ch = getch(); // Wait for a key press or the timeout
+        if (ch == 'q' || ch == 'Q') {
             user_stopped = true;
         }
     }
-
-    user_stopped = true;
-    endwin(); // End ncurses
-    return user_stopped;
-}
 
 void World::add_organism(Organism *organism)
 {

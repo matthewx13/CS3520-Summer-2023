@@ -20,7 +20,6 @@ World::~World() {
 
 template <typename T>
 void add_organisms(int count, World* world) { 
-    
     for (int i = 0; i < count; ++i) {
         int x, y;
         do {
@@ -34,7 +33,8 @@ void add_organisms(int count, World* world) {
 
 void World::initialize(int doodlebugs, int queen_ants, int worker_ants, int male_ants) {
     std::cout << "foo" << std::endl;
-    // Add initial organisms to the world at random locations
+
+    // intialize in random locations
     add_organisms<Doodlebug>(doodlebugs, this);
     add_organisms<QueenAnt>(queen_ants, this);
     add_organisms<WorkerAnt>(worker_ants, this);
@@ -42,9 +42,9 @@ void World::initialize(int doodlebugs, int queen_ants, int worker_ants, int male
 }
 
 bool World::run_simulation(int steps) {
-    initscr(); // Initialize ncurses
-    curs_set(0); // Hide the cursor
-    timeout(100); // Set getch() to non-blocking with 1s delay
+    initscr(); // start ncurses
+    curs_set(0); 
+    timeout(100); // 1s delay
     bool user_stopped = false;
 
     for (int i = 0; i < steps && !user_stopped; i++) {
@@ -53,14 +53,14 @@ bool World::run_simulation(int steps) {
         breed_organisms();
         starve_organisms();
         display_world();
-        int ch = getch(); // Wait for a key press or the timeout
+        int ch = getch(); // quit program if q clicked
         if (ch == 'q' || ch == 'Q') {
             user_stopped = true;
         }
     }
 
     user_stopped = true;
-    endwin(); // End ncurses
+    endwin(); // end ncurses
     return user_stopped;
 }
 
@@ -88,13 +88,12 @@ void World::remove_organism(Organism* organism) {
     }
 }
 
-
 Organism* World::get_organism(int x, int y) {
     return grid[x][y];
 }
 
 void World::move_organisms() {
-    // Move Doodlebugs
+    // db movement
     for (Organism* doodlebug : doodlebugs) {
         if (doodlebug != nullptr) {
             remove_organism(doodlebug);
@@ -103,7 +102,7 @@ void World::move_organisms() {
         }
     }
     
-    // Move Ants
+    // ant movement
     for (Organism* ant : ants) {
         if (ant != nullptr) {
             remove_organism(ant);
@@ -112,33 +111,32 @@ void World::move_organisms() {
         }
     }
 }
-
-
+// breeding
 void World::breed_organisms() {    
-    // Breed Doodlebugs
+    
     for (Organism* doodlebug : doodlebugs) {
         if (doodlebug != nullptr) {
             doodlebug->breed(this);
         }
     }
     
-    // Breed Ants
+
     for (Organism* ant : ants) {
         if (ant != nullptr) {
             ant->breed(this);
         }
     }
 }
-
+//starving
 void World::starve_organisms() {
-    // Starve Doodlebugs
+
     for (Organism* doodlebug : doodlebugs) {
         if (doodlebug != nullptr) {
             doodlebug->starve(this);
         }
     }
 
-    // Starve Ants
+
     for (Organism* ant : ants) {
         if (ant != nullptr) {
             ant->starve(this);
@@ -147,7 +145,7 @@ void World::starve_organisms() {
 }
 
 void World::display_world() {
-    // draw a border around the world
+    // the map 
     for (int i = 0; i < WORLD_SIZE; i++) {
         mvaddch(0, i, '-');
         mvaddch(WORLD_SIZE - 1, i, '-');
@@ -157,7 +155,7 @@ void World::display_world() {
 
     for (int i = 1; i < WORLD_SIZE - 1; i++) {
         for (int j = 1; j < WORLD_SIZE - 1; j++) {
-            // Show space if empty, organism symbol otherwise
+            // space if area empty
             if (grid[i][j] == nullptr) {
                 mvaddch(i, j, ' ');
             } else {
@@ -165,7 +163,7 @@ void World::display_world() {
             }
         }
     }
-    refresh(); // Refresh the ncurses window
+    refresh(); //we need to refresh
 }
 
 bool World::is_empty(int x, int y) {

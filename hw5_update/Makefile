@@ -2,7 +2,7 @@ CXX = g++
 CXXFLAGS = -std=c++11 -Wall -Wextra
 LDLIBS = -lncurses
 
-SRC = world.cpp organism.cpp ant.cpp queen_ant.cpp worker_ant.cpp male_ant.cpp doodlebug.cpp main.cpp
+SRC = world.cpp organism.cpp ant.cpp queen_ant.cpp male_female_ant.cpp doodlebug.cpp main.cpp
 OBJ = $(SRC:.cpp=.o)
 EXEC = simulation
 

@@ -6,18 +6,21 @@ int main() {
     std::cout << "Enter the number of simulation steps: ";
     std::cin >> simulation_steps;
 
-    // Prompt the user to specify how many doodlebugs, queen ants, male and female ants your simulation would start with.
+    // ask user for specs
     int doodlebugs;
-    std::cout << "Enter the number of doodlebugs: ";
+    std::cout << "Please enter desired num of doodlebugs: ";
     std::cin >> doodlebugs;
+
     int queen_ants;
-    std::cout << "Enter the number of queen ants: ";
+    std::cout << "Please enter desired num of queen ants: ";
     std::cin >> queen_ants;
+
     int worker_ants;
-    std::cout << "Enter the number of worker ants: ";
+    std::cout << "Please enter desired num of worker ants (female ants): ";
     std::cin >> worker_ants;
+
     int male_ants;
-    std::cout << "Enter the number of male ants: ";
+    std::cout << "Please enter desired num of male ants: ";
     std::cin >> male_ants;
     
     World world;
@@ -25,7 +28,7 @@ int main() {
 
     bool user_stopped = false;
     while (!user_stopped) {
-        user_stopped = world.run_simulation(1000); // Run the simulation for 1000 steps or until the user stops it
+        user_stopped = world.run_simulation(1000); //run sim 1000 times or until user stops it
     }
 
     return 0;

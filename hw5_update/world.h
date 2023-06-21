@@ -2,8 +2,7 @@
 
 #include "organism.h"
 #include "queen_ant.h"
-#include "worker_ant.h"
-#include "male_ant.h"
+#include "male_female_ant.h"
 #include "doodlebug.h"
 
 class World {

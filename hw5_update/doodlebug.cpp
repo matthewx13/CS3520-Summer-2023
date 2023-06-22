@@ -1,7 +1,6 @@
 #include "doodlebug.h"
 #include "world.h"
 #include <vector>
-#include <cstdlib>
 
 Doodlebug::Doodlebug(int x, int y) : Organism(x, y), time_since_last_meal(0), move_counter(0) {}
 
@@ -10,7 +9,6 @@ Doodlebug::~Doodlebug() {}
 void Doodlebug::move(World* world) {
     int x = get_x();
     int y = get_y();
-
     if (is_adjacent_to_ant(world)) {
         std::pair<int, int> ant_position = get_adjacent_ant(world);
         world->remove_organism(world->get_organism(ant_position.first, ant_position.second));
@@ -23,7 +21,6 @@ void Doodlebug::move(World* world) {
         int direction = rand() % 8;
         int new_x = x;
         int new_y = y;
-
         switch (direction) {
             case 0: // up
                 new_y = (y - 1 < 0) ? y + 1 : y - 1;
@@ -54,7 +51,6 @@ void Doodlebug::move(World* world) {
                 new_y = (y + 1 >= world->get_world_size()) ? y - 1 : y + 1;
                 break;
         }
-
         if (world->is_empty(new_x, new_y)) {
             set_x(new_x);
             set_y(new_y);

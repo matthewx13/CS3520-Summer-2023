@@ -2,7 +2,6 @@
 #include <iostream>
 #include "world.h"
 
-friend bool is_occupied_by_male_ant(World* world, int x, int y);
 
 World::World() {
     for (int i = 0; i < WORLD_SIZE; i++) {

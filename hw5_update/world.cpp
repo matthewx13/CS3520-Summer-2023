@@ -142,6 +142,15 @@ void World::starve_organisms() {
     }
 }
 
+bool World::is_occupied_by_male_ant(int x, int y) {
+    Organism* organism = grid[x][y];
+    if (organism != nullptr) {
+        MaleAnt* male_ant = dynamic_cast<MaleAnt*>(organism);
+        return (male_ant != nullptr);
+    }
+    return false;
+}
+
 void World::display_world() {
     // draw a border around the world
     for (int i = 0; i < WORLD_SIZE; i++) {

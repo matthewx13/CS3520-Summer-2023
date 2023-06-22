@@ -14,12 +14,7 @@ void QueenAnt::move(World* world) {
         }
     }
 
-    if (is_adjacent_to_male(world)) {
-        male_adjacent = true;
-    } else {
-        male_adjacent = false;
-    }
-
+    male_adjacent = is_adjacent_to_male(world);
     move_counter++;
 }
 
@@ -45,7 +40,7 @@ void QueenAnt::breed(World* world) {
 }
 
 void QueenAnt::starve(World* world) {
-    // Queen ants don't starve, so do nothing
+    // Do nothing, queen ants don't starve
     return;
 }
 
@@ -57,16 +52,18 @@ bool QueenAnt::is_adjacent_to_male(World* world) {
     int x = get_x();
     int y = get_y();
 
-    for (int i = x - 1; i <= x + 1; i++) {
-        for (int j = y - 1; j <= y + 1; j++) {
-            if (world->is_empty(i, j)) {
-                continue;
-            }
+    const int adjacent_positions[][2] = {
+        {-1, -1}, {0, -1}, {1, -1},
+        {-1, 0},           {1, 0},
+        {-1, 1},  {0, 1},  {1, 1}
+    };
 
-            Organism* organism = world->get_organism(i, j);
-            if (organism->get_symbol() == 'o') {
-                return true;
-            }
+    for (const auto& pos : adjacent_positions) {
+        int new_x = x + pos[0];
+        int new_y = y + pos[1];
+
+        if (world->is_occupied_by_male_ant(new_x, new_y)) {
+            return true;
         }
     }
 
@@ -76,11 +73,11 @@ bool QueenAnt::is_adjacent_to_male(World* world) {
 void QueenAnt::create_new_ants(World* world) {
     int x = get_x();
     int y = get_y();
+    const int breeding_range = 2;
 
     std::vector<std::pair<int, int>> empty_cells;
-
-    for (int i = std::max(0, x - 2); i <= std::min(world->get_world_size() - 1, x + 2); i++) {
-        for (int j = std::max(0, y - 2); j <= std::min(world->get_world_size() - 1, y + 2); j++) {
+    for (int i = x - breeding_range; i <= x + breeding_range; i++) {
+        for (int j = y - breeding_range; j <= y + breeding_range; j++) {
             if (world->is_empty(i, j)) {
                 empty_cells.push_back(std::make_pair(i, j));
             }
@@ -89,18 +86,17 @@ void QueenAnt::create_new_ants(World* world) {
 
     std::shuffle(empty_cells.begin(), empty_cells.end(), std::default_random_engine());
 
-    int num_new_ants = std::min(10, static_cast<int>(empty_cells.size()));
+    int num_new_ants = std::min(static_cast<int>(empty_cells.size()), 10);
 
     for (int i = 0; i < num_new_ants; i++) {
-        int x = empty_cells[i].first;
-        int y = empty_cells[i].second;
+        int new_x = empty_cells[i].first;
+        int new_y = empty_cells[i].second;
+        bool is_worker_ant = (rand() % 10) < 8;
 
-        int type = rand() % 10;
-
-        if (type < 8) {
-            world->add_organism(new WorkerAnt(x, y));
+        if (is_worker_ant) {
+            world->add_organism(new WorkerAnt(new_x, new_y));
         } else {
-            world->add_organism(new MaleAnt(x, y));
+            world->add_organism(new MaleAnt(new_x, new_y));
         }
     }
 }
@@ -108,11 +104,11 @@ void QueenAnt::create_new_ants(World* world) {
 void QueenAnt::create_new_queen(World* world) {
     int x = get_x();
     int y = get_y();
+    const int breeding_range = 2;
 
     std::vector<std::pair<int, int>> empty_cells;
-
-    for (int i = std::max(0, x - 2); i <= std::min(world->get_world_size() - 1, x + 2); i++) {
-        for (int j = std::max(0, y - 2); j <= std::min(world->get_world_size() - 1, y + 2); j++) {
+    for (int i = x - breeding_range; i <= x + breeding_range; i++) {
+        for (int j = y - breeding_range; j <= y + breeding_range; j++) {
             if (world->is_empty(i, j)) {
                 empty_cells.push_back(std::make_pair(i, j));
             }
@@ -122,9 +118,8 @@ void QueenAnt::create_new_queen(World* world) {
     std::shuffle(empty_cells.begin(), empty_cells.end(), std::default_random_engine());
 
     if (!empty_cells.empty()) {
-        int x = empty_cells[0].first;
-        int y = empty_cells[0].second;
-
-        world->add_organism(new QueenAnt(x, y));
+        int new_x = empty_cells[0].first;
+        int new_y = empty_cells[0].second;
+        world->add_organism(new QueenAnt(new_x, new_y));
     }
 }

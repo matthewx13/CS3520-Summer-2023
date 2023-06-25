@@ -1,6 +1,6 @@
 CC = g++ -std=c++11
 CFLAGS = -Wall -Wextra -pedantic
-OBJS = main.o Court.o Reservation.o Schedule.o ReservationSystem.o User.o ClubMember.o ClubCoach.o ClubOfficer.o time_cal.o StorageData.o
+OBJS = main.o Court.o Reservation.o Schedule.o ReservationSystem.o User.o ClubMember.o ClubCoach.o ClubOfficer.o time_utils.o StorageData.o
 
 all: pickleball_reservation_system
 
@@ -13,13 +13,13 @@ main.o: main.cpp ReservationSystem.h
 Court.o: Court.cpp Court.h Reservation.h
 	$(CC) $(CFLAGS) -c Court.cpp
 
-Reservation.o: Reservation.cpp Reservation.h time_cal.h
+Reservation.o: Reservation.cpp Reservation.h time_utils.h
 	$(CC) $(CFLAGS) -c Reservation.cpp
 
 Schedule.o: Schedule.cpp Schedule.h Court.h Reservation.h
 	$(CC) $(CFLAGS) -c Schedule.cpp
 
-ReservationSystem.o: ReservationSystem.cpp ReservationSystem.h Court.h Reservation.h Schedule.h User.h ClubMember.h ClubCoach.h ClubOfficer.h time_cal.h StorageData.h
+ReservationSystem.o: ReservationSystem.cpp ReservationSystem.h Court.h Reservation.h Schedule.h User.h ClubMember.h ClubCoach.h ClubOfficer.h time_utils.h StorageData.h
 	$(CC) $(CFLAGS) -c ReservationSystem.cpp
 
 User.o: User.cpp User.h
@@ -34,7 +34,7 @@ ClubCoach.o: ClubCoach.cpp ClubCoach.h User.h
 ClubOfficer.o: ClubOfficer.cpp ClubOfficer.h User.h
 	$(CC) $(CFLAGS) -c ClubOfficer.cpp
 
-time_cal.o: time_cal.cpp time_cal.h
+time_utils.o: time_utils.cpp time_utils.h
 	$(CC) $(CFLAGS) -c time_cal.cpp
 
 StorageData.o: StorageData.cpp StorageData.h User.h Schedule.h

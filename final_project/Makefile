@@ -19,7 +19,7 @@ Reservation.o: Reservation.cpp Reservation.h time_cal.h
 Schedule.o: Schedule.cpp Schedule.h Court.h Reservation.h
 	$(CC) $(CFLAGS) -c Schedule.cpp
 
-ReservationSystem.o: ReservationSystem.cpp ReservationSystem.h Court.h Reservation.h Schedule.h User.h ClubMember.h ClubCoach.h ClubOfficer.h time_cal.h DataPersistence.h
+ReservationSystem.o: ReservationSystem.cpp ReservationSystem.h Court.h Reservation.h Schedule.h User.h ClubMember.h ClubCoach.h ClubOfficer.h time_cal.h StorageData.h
 	$(CC) $(CFLAGS) -c ReservationSystem.cpp
 
 User.o: User.cpp User.h

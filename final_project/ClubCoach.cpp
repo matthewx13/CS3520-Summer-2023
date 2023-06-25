@@ -1,9 +1,12 @@
 #include "ClubCoach.h"
+using namespace std;
 
-ClubCoach::ClubCoach(const std::string& username, const std::string& password)
+// Constructor for the ClubCoach class.
+ClubCoach::ClubCoach(const string& username, const string& password)
     : User(username, password, "ClubCoach"), skill_level_("Pro") {
 }
 
+// Checks if the ClubCoach can reserve a slot for a given reservation.
 bool ClubCoach::can_reserve_slot(const Reservation& reservation) const {
     bool two_days = two_days_in_advance(reservation.get_start_time());
     bool coach_hours = within_coach_hours(reservation.get_start_time()) && within_coach_hours(reservation.get_end_time());
@@ -12,6 +15,6 @@ bool ClubCoach::can_reserve_slot(const Reservation& reservation) const {
     return two_days && coach_hours && within_7_days;
 }
 
-std::string& ClubCoach::get_skill_level() {
+// Retrieves the skill level of the ClubCoach.
+string& ClubCoach::get_skill_level() {
     return skill_level_;
-}

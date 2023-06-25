@@ -18,3 +18,4 @@ bool ClubCoach::can_reserve_slot(const Reservation& reservation) const {
 // Retrieves the skill level of the ClubCoach.
 string& ClubCoach::get_skill_level() {
     return skill_level_;
+}

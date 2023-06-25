@@ -35,7 +35,7 @@ ClubOfficer.o: ClubOfficer.cpp ClubOfficer.h User.h
 	$(CC) $(CFLAGS) -c ClubOfficer.cpp
 
 time_utils.o: time_utils.cpp time_utils.h
-	$(CC) $(CFLAGS) -c time_cal.cpp
+	$(CC) $(CFLAGS) -c time_utils.cpp
 
 StorageData.o: StorageData.cpp StorageData.h User.h Schedule.h
 	$(CC) $(CFLAGS) -c StorageData.cpp

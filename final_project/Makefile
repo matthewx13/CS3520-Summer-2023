@@ -7,7 +7,7 @@ all: pickleball_reservation_system
 pickleball_reservation_system: $(OBJS)
 	$(CC) $(CFLAGS) -o pickleball_reservation_system $(OBJS)
 
-main.o: main.cpp PickleballReservationSystem.h
+main.o: main.cpp ReservationSystem.h
 	$(CC) $(CFLAGS) -c main.cpp
 
 Court.o: Court.cpp Court.h Reservation.h

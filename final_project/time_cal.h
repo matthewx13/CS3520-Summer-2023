@@ -1,5 +1,5 @@
-#ifndef TIME_CAL_H
-#define TIME_CAL_H
+#ifndef TIME_UTILS_H
+#define TIME_UTILS_H
 
 #pragma once
 #include <chrono>

@@ -19,8 +19,8 @@ Reservation.o: Reservation.cpp Reservation.h time_cal.h
 Schedule.o: Schedule.cpp Schedule.h Court.h Reservation.h
 	$(CC) $(CFLAGS) -c Schedule.cpp
 
-PickleballReservationSystem.o: PickleballReservationSystem.cpp PickleballReservationSystem.h Court.h Reservation.h Schedule.h User.h ClubMember.h ClubCoach.h ClubOfficer.h time_cal.h DataPersistence.h
-	$(CC) $(CFLAGS) -c PickleballReservationSystem.cpp
+ReservationSystem.o: ReservationSystem.cpp ReservationSystem.h Court.h Reservation.h Schedule.h User.h ClubMember.h ClubCoach.h ClubOfficer.h time_cal.h DataPersistence.h
+	$(CC) $(CFLAGS) -c ReservationSystem.cpp
 
 User.o: User.cpp User.h
 	$(CC) $(CFLAGS) -c User.cpp

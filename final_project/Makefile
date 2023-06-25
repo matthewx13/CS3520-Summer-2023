@@ -1,6 +1,6 @@
 CC = g++ -std=c++11
 CFLAGS = -Wall -Wextra -pedantic
-OBJS = main.o Court.o Reservation.o Schedule.o PickleballReservationSystem.o User.o ClubMember.o ClubCoach.o ClubOfficer.o time_cal.o StorageData.o
+OBJS = main.o Court.o Reservation.o Schedule.o ReservationSystem.o User.o ClubMember.o ClubCoach.o ClubOfficer.o time_cal.o StorageData.o
 
 all: pickleball_reservation_system
 

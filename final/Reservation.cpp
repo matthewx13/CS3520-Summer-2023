@@ -9,16 +9,16 @@ int Reservation::get_id() const {
     return id_;
 }
 
+const time_point& Reservation::get_end_time() const {
+    return end_time_;
+}
+
 const std::string& Reservation::get_user() const {
     return user_;
 }
 
 const time_point& Reservation::get_start_time() const {
     return start_time_;
-}
-
-const time_point& Reservation::get_end_time() const {
-    return end_time_;
 }
 
 std::string Reservation::to_string() const {
@@ -34,18 +34,18 @@ std::string Reservation::to_string() const {
     return ss.str();
 }
 
-void Reservation::add_user(const std::string& player) {
-    players_.push_back(player);
-}
-
-void Reservation::remove_user(const std::string& player) {
-    players_.erase(std::remove(players_.begin(), players_.end(), player), players_.end());
-}
-
 void Reservation::user_who_requested_modification(const std::string& requester) {
     user_ = requester;
 }
 
 bool Reservation::user_in_given_reservation(const std::string& user) const {
     return user_ == user || std::find(players_.begin(), players_.end(), user) != players_.end();
+}
+
+void Reservation::add_user(const std::string& player) {
+    players_.push_back(player);
+}
+
+void Reservation::remove_user(const std::string& player) {
+    players_.erase(std::remove(players_.begin(), players_.end(), player), players_.end());
 }

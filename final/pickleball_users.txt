@@ -1,0 +1,10 @@
+9
+Alice|ClubMember|C|member
+Bob|ClubMember|B|member
+James|ClubMember|A|member
+Sarah|ClubMember|B|member
+Charlie|ClubOfficer|A|officer
+Dave|ClubCoach|Pro|coach
+Eve|ClubCoach|Pro|coach
+s|ClubOfficer|a|s
+Silas|ClubMember|A|silas

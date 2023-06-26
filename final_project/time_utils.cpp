@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <sstream>
 #include <iostream>
+#include <ctime>
 
 int get_hour_from_time_point(const time_point& time_point) {
     auto time_t = std::chrono::system_clock::to_time_t(time_point);
@@ -43,7 +44,7 @@ std::string get_time_string(const time_point& time_point) {
 }
 
 time_point string_to_time_point(const std::string& date_str, const std::string& time_str) {
-    // convert date_str and time_str to a time_point
+    // Convert date_str and time_str to a time_point
     std::tm tm = {};
     std::istringstream ss(date_str + " " + time_str);
     
@@ -56,17 +57,18 @@ time_point string_to_time_point(const std::string& date_str, const std::string& 
     if (tt == -1) {
         throw std::runtime_error("Failed to convert time string to time_t");
     }
-    
-    return std::chrono::system_clock::from_time_t(tt) - std::chrono::hours(1);
+
+    auto time_point = std::chrono::system_clock::from_time_t(tt);
+    return time_point - std::chrono::hours(1);
 }
 
 bool is_future_date(const time_point& time_point) {
-    // check if time_point is in the future
+    // Check if time_point is in the future
     return time_point > std::chrono::system_clock::now();
 }
 
 bool is_date_valid(const std::string& date_str, const std::string& time_str) {
-    // check if date_str and time_str are valid
+    // Check if date_str and time_str are valid
     std::tm tm = {};
     std::istringstream ss(date_str + " " + time_str);
     

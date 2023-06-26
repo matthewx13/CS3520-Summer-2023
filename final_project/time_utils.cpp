@@ -5,6 +5,8 @@
 #include <sstream>
 #include <stdexcept>
 
+using namespace std;
+
 int get_hour_from_time_point(const time_point& time_point) {
     auto time_t = std::chrono::system_clock::to_time_t(time_point);
     std::tm* tm = std::localtime(&time_t);
@@ -17,34 +19,34 @@ int get_day_from_time_point(const time_point& time_point) {
     return tm->tm_wday;
 }
 
-std::string print_time_and_date(const time_point& time_point) {
+string print_time_and_date(const time_point& time_point) {
     auto time_t = std::chrono::system_clock::to_time_t(time_point);
     std::tm tm = *std::localtime(&time_t);
 
-    std::stringstream ss;
-    ss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S");
-    return ss.str();
+    char buffer[20];
+    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", &tm);
+    return string(buffer);
 }
 
-std::string get_date_string(const time_point& time_point) {
+string get_date_string(const time_point& time_point) {
     auto time_t = std::chrono::system_clock::to_time_t(time_point);
     std::tm tm = *std::localtime(&time_t);
 
-    std::stringstream ss;
-    ss << std::put_time(&tm, "%Y-%m-%d");
-    return ss.str();
+    char buffer[11];
+    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d", &tm);
+    return string(buffer);
 }
 
-std::string get_time_string(const time_point& time_point) {
+string get_time_string(const time_point& time_point) {
     auto time_t = std::chrono::system_clock::to_time_t(time_point);
     std::tm tm = *std::localtime(&time_t);
 
-    std::stringstream ss;
-    ss << std::put_time(&tm, "%H:%M");
-    return ss.str();
+    char buffer[6];
+    std::strftime(buffer, sizeof(buffer), "%H:%M", &tm);
+    return string(buffer);
 }
 
-time_point string_to_time_point(const std::string& date_str, const std::string& time_str) {
+time_point string_to_time_point(const string& date_str, const string& time_str) {
     // convert date_str and time_str to a time_point
     std::tm tm = {};
     std::istringstream ss(date_str + " " + time_str);
@@ -62,7 +64,7 @@ bool is_future_date(const time_point& time_point) {
     return time_point > std::chrono::system_clock::now();
 }
 
-bool is_date_valid(const std::string& date_str, const std::string& time_str) {
+bool is_date_valid(const string& date_str, const string& time_str) {
     try {
         string_to_time_point(date_str, time_str);
         return true;

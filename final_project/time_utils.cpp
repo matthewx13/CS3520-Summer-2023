@@ -50,21 +50,22 @@ time_point string_to_time_point(const string& date_str, const string& time_str) 
     std::tm tm = {};
 
     std::istringstream date_stream(date_str);
-    date_stream >> std::get_time(&tm, "%Y-%m-%d");
-    if (date_stream.fail()) {
-        throw std::runtime_error("Failed to parse date string");
-    }
+    std::getline(date_stream, date_str, '-');
+    tm.tm_year = std::stoi(date_str) - 1900;
+    std::getline(date_stream, date_str, '-');
+    tm.tm_mon = std::stoi(date_str) - 1;
+    std::getline(date_stream, date_str);
+    tm.tm_mday = std::stoi(date_str);
 
     std::istringstream time_stream(time_str);
-    time_stream >> std::get_time(&tm, "%H:%M");
-    if (time_stream.fail()) {
-        throw std::runtime_error("Failed to parse time string");
-    }
+    std::getline(time_stream, time_str, ':');
+    tm.tm_hour = std::stoi(time_str);
+    std::getline(time_stream, time_str);
+    tm.tm_min = std::stoi(time_str);
 
     auto time_t = std::mktime(&tm);
     return std::chrono::system_clock::from_time_t(time_t);
 }
-
 
 
 bool is_future_date(const time_point& time_point) {

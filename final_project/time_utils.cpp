@@ -47,18 +47,24 @@ string get_time_string(const time_point& time_point) {
 }
 
 time_point string_to_time_point(const string& date_str, const string& time_str) {
-    // convert date_str and time_str to a time_point
     std::tm tm = {};
-    std::istringstream ss(date_str + " " + time_str);
-    
-    ss >> std::get_time(&tm, "%Y-%m-%d %H:%M");
-    if (ss.fail()) {
-        throw std::runtime_error("Failed to parse date and time string");
+
+    std::istringstream date_stream(date_str);
+    date_stream >> std::get_time(&tm, "%Y-%m-%d");
+    if (date_stream.fail()) {
+        throw std::runtime_error("Failed to parse date string");
     }
-    
+
+    std::istringstream time_stream(time_str);
+    time_stream >> std::get_time(&tm, "%H:%M");
+    if (time_stream.fail()) {
+        throw std::runtime_error("Failed to parse time string");
+    }
+
     auto time_t = std::mktime(&tm);
     return std::chrono::system_clock::from_time_t(time_t);
 }
+
 
 bool is_future_date(const time_point& time_point) {
     return time_point > std::chrono::system_clock::now();

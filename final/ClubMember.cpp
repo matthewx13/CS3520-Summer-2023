@@ -40,6 +40,6 @@ void ClubMember::reset_days_played() {
     days_played.clear();
 }
 
-std::string& ClubMember::get_skill_level() {
-    return skill_level_; // qualifiers dropped in binding reference of type "std::__1::string &" to initializer of type "const std::__1::string" so we 
+std::string ClubMember::get_skill_level() const {
+    return skill_level_;
 }

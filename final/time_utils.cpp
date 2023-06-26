@@ -47,7 +47,7 @@ std::string get_date_string(const std::chrono::system_clock::time_point& time_po
 }
 
 
-std::string get_time_string(const std::chrono::system_clock::time_point& time_point) {
+std::string get_time_string(const time_point& time_point) {
     auto time_t = std::chrono::system_clock::to_time_t(time_point);
     std::tm tm = *std::localtime(&time_t);
 
@@ -58,7 +58,7 @@ std::string get_time_string(const std::chrono::system_clock::time_point& time_po
     return oss.str();
 }
 
-std::chrono::system_clock::time_point string_to_time_point(const std::string& date_str, const std::string& time_str) {
+time_point string_to_time_point(const std::string& date_str, const std::string& time_str) {
     std::tm tm = {};
     std::istringstream ss(date_str + " " + time_str);
     

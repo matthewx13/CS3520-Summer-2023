@@ -3,10 +3,10 @@ CC=g++ -std=c++11
 CFLAGS= -I$(IDIR) -g -std=c++11 -O0
 OBJS = main.o Court.o Reservation.o Schedule.o PickleballReservationSystem.o User.o ClubMember.o ClubCoach.o ClubOfficer.o time_utils.o DataPersistence.o
 
-all: pickleball_reservation_system
+all: pickleball
 
-pickleball_reservation_system: $(OBJS)
-	$(CC) $(CFLAGS) -o pickleball_reservation_system $(OBJS)
+pickleball: $(OBJS)
+	$(CC) $(CFLAGS) -o pickleball $(OBJS)
 
 main.o: main.cpp PickleballReservationSystem.h
 	$(CC) $(CFLAGS) -c main.cpp

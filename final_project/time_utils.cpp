@@ -29,19 +29,21 @@ std::string get_date_string(const time_point& time_point) {
     auto time_t = std::chrono::system_clock::to_time_t(time_point);
     std::tm tm = *std::localtime(&time_t);
 
-    std::stringstream ss;
-    ss << std::put_time(&tm, "%Y-%m-%d");
-    return ss.str();
+    char buffer[11];  // Buffer to hold the formatted date string (YYYY-MM-DD + null terminator)
+    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d", &tm);
+    return std::string(buffer);
 }
 
 std::string get_time_string(const time_point& time_point) {
     auto time_t = std::chrono::system_clock::to_time_t(time_point);
     std::tm tm = *std::localtime(&time_t);
 
-    std::stringstream ss;
-    ss << std::put_time(&tm, "%H:%M");
-    return ss.str();
+    char buffer[6];  // Buffer to hold the formatted time string (HH:MM + null terminator)
+    std::strftime(buffer, sizeof(buffer), "%H:%M", &tm);
+    return std::string(buffer);
 }
+
+// The rest of the functions remain the same as in the previous response
 
 time_point string_to_time_point(const std::string& date_str, const std::string& time_str) {
     // Convert date_str and time_str to a time_point
@@ -68,21 +70,12 @@ bool is_future_date(const time_point& time_point) {
 }
 
 bool is_date_valid(const std::string& date_str, const std::string& time_str) {
-    // Check if date_str and time_str are valid
+    // Validate date_str and time_str
     std::tm tm = {};
     std::istringstream ss(date_str + " " + time_str);
-    
-    ss >> std::get_time(&tm, "%Y-%m-%d %H:%M");
-    if (ss.fail()) {
-        return false;
-    }
 
-    std::time_t tt = std::mktime(&tm);
-    if (tt == -1) {
-        return false;
-    }
-    
-    return true;
+    ss >> std::get_time(&tm, "%Y-%m-%d %H:%M");
+    return !ss.fail();
 }
 
 bool two_days_in_advance(const time_point& time_point) {

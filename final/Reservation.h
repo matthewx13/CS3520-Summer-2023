@@ -21,8 +21,8 @@ public:
     std::string to_string() const;
     void add_user(const std::string& player);
     void remove_user(const std::string& player);
-    void modify_requester(const std::string& requester);
-    bool is_user_in_reservation(const std::string& user) const;
+    void user_who_requested_modification(const std::string& requester);
+    bool user_in_given_reservation(const std::string& user) const;
 
 private:
     int id_;

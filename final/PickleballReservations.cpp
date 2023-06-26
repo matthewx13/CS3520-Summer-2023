@@ -90,7 +90,7 @@ void PickleballReservations::show_reservations(const User& user) const {
 
 void PickleballReservations::reserve_court(const User& user, int court_id,  const std::string& start_date_str, const std::string& start_time_str) {
     // convert start_time
-    time_point start_time = string_to_time_point(start_date_str, start_time_str);
+    time_point start_time = turn_given_string_to_time_point(start_date_str, start_time_str);
     // set end_time to 30 minutes after start_time
     time_point end_time = start_time + std::chrono::minutes(30);
 
@@ -117,7 +117,7 @@ void PickleballReservations::reserve_court(const User& user, int court_id,  cons
 
     if (user.is_slot_open(new_reservation)) {
         // add reservation to schedule
-        schedule_.add_reservation_to_court(court_id, new_reservation);
+        schedule_.have_court_add_reservation(court_id, new_reservation);
         next_reservation_id_++;
     } else {
         std::cout << "Reservation " << next_reservation_id_ << " not available for your privileges." << std::endl;
@@ -151,7 +151,7 @@ bool PickleballReservations::delete_reservation(int reservation_id, const User& 
     decrement_limit_for_user(user, r->get_start_time());
 }
 
-bool PickleballReservations::add_user_to_reservation(int reservation_id, const User& user) {
+bool PickleballReservations::add_given_user_to_given_reservation(int reservation_id, const User& user) {
     // get reservation
     const Reservation* r = schedule_.get_reservation(reservation_id);
     if (r == nullptr) {
@@ -160,7 +160,7 @@ bool PickleballReservations::add_user_to_reservation(int reservation_id, const U
         return false;
     }
 
-    bool joining = schedule_.add_user_to_reservation(reservation_id, user);
+    bool joining = schedule_.add_given_user_to_given_reservation(reservation_id, user);
 
     if (joining) {
         std::cout << "User " << user.get_username() << " added to reservation " << reservation_id << std::endl;
@@ -198,7 +198,7 @@ bool PickleballReservations::delete_from_reservation_given_user(int reservation_
     decrement_limit_for_user(user, r->get_start_time());
 }
 
-bool PickleballReservations::request_reservation_modification(int reservation_id, const User& requester, ClubOfficer& officer) {
+bool PickleballReservations::attempt_to_modify_reservation_request(int reservation_id, const User& requester, ClubOfficer& officer) {
     // if requester get_role() is a ClubOfficer, return false
     if (requester.get_role() == "ClubOfficer") {
         return false;

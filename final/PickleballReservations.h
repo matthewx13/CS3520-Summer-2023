@@ -23,9 +23,9 @@ public:
     void show_reservations(const User& user) const;
     void reserve_court(const User& user, int court_id, const std::string& start_date_str, const std::string& start_time_str);
     bool delete_reservation(int reservation_id, const User& user);
-    bool add_user_to_reservation(int reservation_id, const User& user);
+    bool add_given_user_to_given_reservation(int reservation_id, const User& user);
     bool delete_from_reservation_given_user(int reservation_id, const User& user);
-    bool request_reservation_modification(int reservation_id, const User& requester, ClubOfficer& officer);
+    bool attempt_to_modify_reservation_request(int reservation_id, const User& requester, ClubOfficer& officer);
     void save_to_out_file() const;
     void load_from_in_file();
     void login(const std::string& username, const std::string& password);

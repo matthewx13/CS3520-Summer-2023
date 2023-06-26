@@ -111,12 +111,12 @@ void DataPersistence::load_from_in_file(const std::string& users_filename, const
                     players.push_back(player);
                 }
 
-                time_point start_time = string_to_time_point(start_date_str, start_time_str);
+                time_point start_time = turn_given_string_to_time_point(start_date_str, start_time_str);
                 time_point end_time = start_time + std::chrono::minutes(30);
 
                 Reservation reservation(id, user, start_time, end_time, players);
 
-                schedule.add_reservation_to_court(i, reservation);
+                schedule.have_court_add_reservation(i, reservation);
             }
         }
     }

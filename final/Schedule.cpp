@@ -4,7 +4,7 @@
 Schedule::Schedule() {
 }
 
-void Schedule::add_reservation_to_court(int court_id, const Reservation& reservation) {
+void Schedule::have_court_add_reservation(int court_id, const Reservation& reservation) {
     if (court_id < 1 || court_id > 3) {
         return;
     }
@@ -33,7 +33,7 @@ bool Schedule::reserve_reservation(int court_id, const Reservation& reservation,
     return false;
 }
 
-bool Schedule::add_user_to_reservation(int reservation_id, const User& user) {
+bool Schedule::add_given_user_to_given_reservation(int reservation_id, const User& user) {
     for (Court& court : courts_) {
         std::vector<Reservation>& reservations = court.get_reservations();
         for (Reservation& r : reservations) {
@@ -90,16 +90,16 @@ bool Schedule::request_reservation_cancellation(int reservation_id, const User& 
 std::string Schedule::display_daily_schedule(const std::chrono::system_clock::time_point& date) const {
     std::string schedule;
     // print today's date and time
-    schedule += "\nSchedule for " + get_date_string(date) + "\n";
+    schedule += "\nSchedule for " + get_given_string_for_date(date) + "\n";
     schedule += "Opening hours: 6:00 - 12:00\n";
     schedule += "Coaching hours: 9:00 - 12:00 (+15:00 - 18:00 on weekdays and Sundays)\n";
-    schedule += "Now: " + get_time_string(date) + "\n\n";
+    schedule += "Now: " + get_given_time_point_time_string(date) + "\n\n";
     // print each court's schedule
     for (int i = 0; i < 3; ++i) {
         schedule += "Court " + std::to_string(i + 1) + ":\n";
         const auto& reservations = courts_[i].get_reservations();
         for (const Reservation& r : reservations) {
-            if (get_day_from_time_point(r.get_start_time()) == get_day_from_time_point(date)) {
+            if (get_day_from_given_time(r.get_start_time()) == get_day_from_given_time(date)) {
                 schedule += r.to_string() + "\n";
             }
         }
@@ -116,7 +116,7 @@ std::string Schedule::print_user_reservations(const User& user) const {
         const std::vector<Reservation>& court_reservations = court.get_reservations();
         for (const Reservation& r : court_reservations) {
             // if user is in reservation and its in the future print it
-            if (r.is_user_in_reservation(user.get_username()) &&  is_future_date(r.get_start_time())) {
+            if (r.user_in_given_reservation(user.get_username()) &&  future_date_valid(r.get_start_time())) {
                 reservations += r.to_string() + "\n";
             }
         }

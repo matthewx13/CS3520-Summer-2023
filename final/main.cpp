@@ -134,7 +134,7 @@ void reserve_court(PickleballReservations& system, const User& user) {
         std::cout << "Enter start date and time (format: YYYY-MM-DD HH:MM): ";
         std::cin >> start_date_str >> start_time_str;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    } while (!is_date_valid(start_date_str, start_time_str));
+    } while (!is_given_date_valid(start_date_str, start_time_str));
 
 
     system.reserve_court(user, court_id, start_date_str, start_time_str);
@@ -151,7 +151,7 @@ void join_reservation(PickleballReservations& system, const User& user) {
     int reservation_id;
     std::cout << "Enter reservation ID: ";
     std::cin >> reservation_id;
-    system.add_user_to_reservation(reservation_id, user);
+    system.add_given_user_to_given_reservation(reservation_id, user);
 }
 
 void add_reservation_from_user(PickleballReservations& system) {
@@ -167,7 +167,7 @@ void add_reservation_from_user(PickleballReservations& system) {
  
     User* user = system.find_user(username);
   
-    system.add_user_to_reservation(reservation_id, *user);
+    system.add_given_user_to_given_reservation(reservation_id, *user);
 }
 
 void delete_from_reservation_current_user(PickleballReservations& system, const User& user) {
@@ -205,7 +205,7 @@ void ask_officer_change_reservation(PickleballReservations& system, const User& 
    
     std::cout << "Enter reservation ID: ";
     std::cin >> reservation_id;
-    system.request_reservation_modification(reservation_id, user, *officer);
+    system.attempt_to_modify_reservation_request(reservation_id, user, *officer);
 }
 
 void officer_menu(PickleballReservations& system) {

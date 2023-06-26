@@ -12,9 +12,9 @@ public:
     Schedule();
 
 
-    void add_reservation_to_court(int court_id, const Reservation& reservation);
+    void have_court_add_reservation(int court_id, const Reservation& reservation);
     bool reserve_reservation(int court_id, const Reservation& reservation,  const User& user);
-    bool add_user_to_reservation(int reservation_id, const User& user);
+    bool add_given_user_to_given_reservation(int reservation_id, const User& user);
     bool delete_from_reservation_given_user(int reservation_id, const User& user);
     bool delete_res(int reservation_id, const User& user);
     bool request_reservation_cancellation(int reservation_id, const User& requester, ClubOfficer& officer);

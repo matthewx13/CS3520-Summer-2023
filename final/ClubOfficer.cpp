@@ -6,8 +6,8 @@ ClubOfficer::ClubOfficer(const std::string& username, const std::string& passwor
 }
 
 bool ClubOfficer::is_slot_open(const Reservation& reservation) const {
-    bool in_officer_hours = within_officer_hours(reservation.get_start_time()) && within_officer_hours(reservation.get_end_time());
-    bool within_7_days = within_seven_days(reservation.get_start_time());
+    bool in_officer_hours = check_if_officer_available(reservation.get_start_time()) && check_if_officer_available(reservation.get_end_time());
+    bool within_7_days = new_time_in_seven_days(reservation.get_start_time());
     bool played_today = !played_on_day(reservation.get_start_time());
     bool played_twice = days_played.size() >= 2;
 

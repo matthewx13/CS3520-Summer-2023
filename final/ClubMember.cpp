@@ -9,8 +9,8 @@ bool ClubMember::is_slot_open(const Reservation& reservation) const {
     bool played_today = !played_on_day(start_time);
     bool played_twice = !days_played.size() >= 2;
 
-    bool within_open_hours = within_opening_hours(reservation.get_start_time()) && within_opening_hours(reservation.get_end_time());
-    bool within_2_days = within_two_days(reservation.get_start_time());
+    bool within_open_hours = new_time_in_opening_hours(reservation.get_start_time()) && new_time_in_opening_hours(reservation.get_end_time());
+    bool within_2_days = new_time_in_two_days(reservation.get_start_time());
 
     return played_today && played_twice && within_open_hours && within_2_days;
 }

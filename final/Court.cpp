@@ -27,11 +27,12 @@ bool Court::delete_res(int reservation_id) {
     return removed;
 }
 
+std::vector<Reservation>& Court::get_reservations() {
+    return reservations_;
+}
+
 const std::vector<Reservation>& Court::get_reservations() const {
     return reservations_;
 }
 
-std::vector<Reservation>& Court::get_reservations() {
-    return reservations_;
-}
 

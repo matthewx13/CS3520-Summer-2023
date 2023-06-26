@@ -40,6 +40,6 @@ void ClubMember::reset_days_played() {
     days_played.clear();
 }
 
-std::string ClubMember::get_skill_level() const {
-    return skill_level_;
+std::string& ClubMember::get_skill_level() {
+    return skill_level_; 
 }

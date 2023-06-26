@@ -1,5 +1,5 @@
 4
 Charlie|ClubOfficer|A|charlie
 Dave|ClubCoach|Pro|dave
-Silas|ClubMember|A|silas
+Joe|ClubMember|A|joe
 test|ClubMember|A|test

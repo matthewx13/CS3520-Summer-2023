@@ -4,43 +4,43 @@
 #include <iostream>
 #include <ctime>
 
-int get_hour_from_time_point(const time_point& time_point) {
-    auto time_t = std::chrono::system_clock::to_time_t(time_point);
-    std::tm* tm = std::localtime(&time_t);
-    return tm->tm_hour;
-}
-
-int get_day_from_time_point(const time_point& time_point) {
-    auto time_t = std::chrono::system_clock::to_time_t(time_point);
-    std::tm* tm = std::localtime(&time_t);
-    return tm->tm_wday;
-}
+#include <ctime>
+#include <sstream>
+#include <iomanip>
 
 std::string print_time_and_date(const time_point& time_point) {
-    auto time_t = std::chrono::system_clock::to_time_t(time_point);
-    std::tm tm = *std::localtime(&time_t);
-
+    std::time_t time_t = std::chrono::system_clock::to_time_t(time_point);
     std::stringstream ss;
-    ss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S");
+    ss << std::put_time(std::localtime(&time_t), "%Y-%m-%d %H:%M:%S");
     return ss.str();
 }
 
-std::string get_date_string(const time_point& time_point) {
-    auto time_t = std::chrono::system_clock::to_time_t(time_point);
-    std::tm tm = *std::localtime(&time_t);
+time_point string_to_time_point(const std::string& date_str, const std::string& time_str) {
+    std::tm tm = {};
+    std::istringstream date_stream(date_str + " " + time_str);
+    date_stream >> std::get_time(&tm, "%Y-%m-%d %H:%M");
+    if (date_stream.fail()) {
+        throw std::runtime_error("Failed to parse time string");
+    }
+    std::time_t time_t = std::mktime(&tm);
+    if (time_t == -1) {
+        throw std::runtime_error("Failed to convert time string to time_t");
+    }
+    return std::chrono::system_clock::from_time_t(time_t);
+}
 
-    char buffer[11];  // Buffer to hold the formatted date string (YYYY-MM-DD + null terminator)
-    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d", &tm);
-    return std::string(buffer);
+std::string get_date_string(const time_point& time_point) {
+    std::time_t time_t = std::chrono::system_clock::to_time_t(time_point);
+    std::stringstream ss;
+    ss << std::put_time(std::localtime(&time_t), "%Y-%m-%d");
+    return ss.str();
 }
 
 std::string get_time_string(const time_point& time_point) {
-    auto time_t = std::chrono::system_clock::to_time_t(time_point);
-    std::tm tm = *std::localtime(&time_t);
-
-    char buffer[6];  // Buffer to hold the formatted time string (HH:MM + null terminator)
-    std::strftime(buffer, sizeof(buffer), "%H:%M", &tm);
-    return std::string(buffer);
+    std::time_t time_t = std::chrono::system_clock::to_time_t(time_point);
+    std::stringstream ss;
+    ss << std::put_time(std::localtime(&time_t), "%H:%M");
+    return ss.str();
 }
 
 // The rest of the functions remain the same as in the previous response

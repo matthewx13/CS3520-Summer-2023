@@ -36,10 +36,12 @@ void ClubMember::remove_day_played(const time_point& date) {
     days_played.erase(it, days_played.end());
 }
 
+std::string& ClubMember::get_skill_of_member() {
+    return skill_; 
+}
+
 void ClubMember::clear_days_played() {
     days_played.clear();
 }
 
-std::string& ClubMember::get_skill_of_member() {
-    return skill_; 
-}
+

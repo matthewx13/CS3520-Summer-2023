@@ -1,4 +1,4 @@
-// PickleballReservationSystem.h
+// PickleballReservations.h
 #pragma once
 #include <vector>
 #include "User.h"
@@ -10,24 +10,24 @@
 #include "DataPersistence.h"
 #include <memory>
 
-class PickleballReservationSystem {
+class PickleballReservations {
 public:
-    PickleballReservationSystem();
+    PickleballReservations();
 
     User* find_user(const std::string& username);
     ClubOfficer* find_officer();
     ClubOfficer* find_officer(const std::string& username);
     void add_user(const std::string& username, const std::string& password, const std::string& lowered_role, const std::string& skill_level);
     void display_schedule() const;
-    void view_requests(const ClubOfficer& officer) const;
-    void view_reservations(const User& user) const;
+    void show_requests_for_res(const ClubOfficer& officer) const;
+    void show_reservations(const User& user) const;
     void reserve_court(const User& user, int court_id, const std::string& start_date_str, const std::string& start_time_str);
     bool delete_reservation(int reservation_id, const User& user);
     bool add_user_to_reservation(int reservation_id, const User& user);
-    bool remove_user_from_reservation(int reservation_id, const User& user);
+    bool delete_from_reservation_given_user(int reservation_id, const User& user);
     bool request_reservation_modification(int reservation_id, const User& requester, ClubOfficer& officer);
-    void save_data_to_file() const;
-    void load_data_from_file();
+    void save_to_out_file() const;
+    void load_from_in_file();
     void login(const std::string& username, const std::string& password);
     void signup(const std::string& username, const std::string& password, const std::string& lowered_role, const std::string& skill_level);
     void logout();
@@ -39,8 +39,8 @@ private:
     std::vector<std::shared_ptr<User>> users_;
     int next_reservation_id_;
     Schedule schedule_;
-    User* logged_in_user_;
+    User* current_logged_user;
 
-    void increment_user_limits(const User& user, const time_point& time);
-    void decrement_user_limits(const User& user, const time_point& time);
+    void increment_limit_for_user(const User& user, const time_point& time);
+    void decrement_limit_for_user(const User& user, const time_point& time);
 };

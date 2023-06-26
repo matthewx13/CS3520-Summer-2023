@@ -14,14 +14,14 @@ public:
     User(const std::string& username, const std::string& password, const std::string& role);
     virtual ~User() = default;
 
-    virtual bool can_reserve_slot(const Reservation& reservation) const = 0;
-    virtual bool can_modify_reservation() const;
+    virtual bool is_slot_open(const Reservation& reservation) const = 0;
+    virtual bool able_to_edit_res() const;
 
     bool authenticate(const std::string& password) const;
     const std::string& get_username() const;
     const std::string& get_password() const;
     const std::string& get_role() const;
-    virtual std::string& get_skill_level() = 0;
+    virtual std::string& get_skill_of_member() = 0;
 
 protected:
     std::string username_;

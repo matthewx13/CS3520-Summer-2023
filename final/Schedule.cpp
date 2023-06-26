@@ -10,23 +10,23 @@ void Schedule::add_reservation_to_court(int court_id, const Reservation& reserva
     }
 
     Court& court = courts_[court_id - 1];
-    if (court.is_slot_available(reservation)) {
-        court.reserve_slot(reservation);
+    if (court.reservation_is_free(reservation)) {
+        court.reserve_reservation(reservation);
         std::cout << "Reservation " << reservation.get_id() << " added to court " << court_id << std::endl;
     } else {
         std::cout << "Reservation not available." << std::endl;
     }
 }
 
-bool Schedule::reserve_slot(int court_id, const Reservation& reservation, const User& user) {
+bool Schedule::reserve_reservation(int court_id, const Reservation& reservation, const User& user) {
     if (court_id < 1 || court_id > 3) {
         return false;
     }
 
-    if (user.can_reserve_slot(reservation)) {
+    if (user.is_slot_open(reservation)) {
         Court& court = courts_[court_id - 1];
-        if (court.is_slot_available(reservation)) {
-            court.reserve_slot(reservation);
+        if (court.reservation_is_free(reservation)) {
+            court.reserve_reservation(reservation);
             return true;
         }
     }
@@ -46,7 +46,7 @@ bool Schedule::add_user_to_reservation(int reservation_id, const User& user) {
     return false;
 }
 
-bool Schedule::remove_user_from_reservation(int reservation_id, const User& user) {
+bool Schedule::delete_from_reservation_given_user(int reservation_id, const User& user) {
     // loop through courts and reservations to find reservation
     for (Court& court : courts_) {
         std::vector<Reservation>& reservations = court.get_reservations();
@@ -60,7 +60,7 @@ bool Schedule::remove_user_from_reservation(int reservation_id, const User& user
     return false;
 }
 
-bool Schedule::cancel_reservation(int reservation_id, const User& user) {
+bool Schedule::delete_res(int reservation_id, const User& user) {
     // loop through courts and reservations to find reservation
     for (Court& court : courts_) {
         std::vector<Reservation>& reservations = court.get_reservations();
@@ -70,7 +70,7 @@ bool Schedule::cancel_reservation(int reservation_id, const User& user) {
                 if (user.get_role() != "ClubOfficer" && r.get_user() != user.get_username()) {
                     return false;
                 }
-                court.cancel_reservation(reservation_id);
+                court.delete_res(reservation_id);
                 return true;
             }
         }
@@ -82,7 +82,7 @@ bool Schedule::request_reservation_cancellation(int reservation_id, const User& 
     // add requests to officers list of requests
     std::string requester_username = requester.get_username();
     std::string request = "Request to cancel reservation " + std::to_string(reservation_id) + " from " + requester_username;
-    officer.add_request(request);
+    officer.append_request(request);
 
     return false;
 }

@@ -16,7 +16,7 @@ const std::string& User::get_role() const {
     return role_;
 }
 
-bool User::can_modify_reservation() const {
+bool User::able_to_edit_res() const {
     return false;
 }
 

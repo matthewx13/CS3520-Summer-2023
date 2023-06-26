@@ -3,7 +3,7 @@
 Court::Court() {
 }
 
-bool Court::is_slot_available(const Reservation& reservation) const {
+bool Court::reservation_is_free(const Reservation& reservation) const {
     for (const Reservation& r : reservations_) {
         if (r.get_start_time() == reservation.get_start_time() &&
             r.get_end_time() == reservation.get_end_time()) {
@@ -13,31 +13,11 @@ bool Court::is_slot_available(const Reservation& reservation) const {
     return true;
 }
 
-void Court::reserve_slot(const Reservation& reservation) {
+void Court::reserve_reservation(const Reservation& reservation) {
     reservations_.push_back(reservation);
 }
 
-// bool Court::add_user_to_reservation(int reservation_id, const User& user) {
-//     for (Reservation& r : reservations_) {
-//         if (r.get_id() == reservation_id) {
-//             r.add_user(user.get_username());
-//             return true;
-//         }
-//     }
-//     return false;
-// }
-
-// bool Court::remove_user_from_reservation(int reservation_id, const User& user) {
-//     for (Reservation& r : reservations_) {
-//         if (r.get_id() == reservation_id) {
-//             r.remove_user(user.get_username());
-//             return true;
-//         }
-//     }
-//     return false;
-// }
-
-bool Court::cancel_reservation(int reservation_id) {
+bool Court::delete_res(int reservation_id) {
     auto it = std::remove_if(reservations_.begin(), reservations_.end(),
                              [&reservation_id](const Reservation& r) {
                                  return r.get_id() == reservation_id;

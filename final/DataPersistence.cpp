@@ -4,12 +4,12 @@
 #include "ClubCoach.h"
 #include "time_utils.h"
 
-void DataPersistence::save_data_to_file(const std::string& users_filename, const std::string& reservations_filename, const std::string& reservation_id_filename, const std::vector<std::shared_ptr<User>>& users, int next_reservation_id, const Schedule& schedule) {
+void DataPersistence::save_to_out_file(const std::string& users_filename, const std::string& reservations_filename, const std::string& reservation_id_filename, const std::vector<std::shared_ptr<User>>& users, int next_reservation_id, const Schedule& schedule) {
     // Save users
     std::ofstream users_outfile(users_filename);
     users_outfile << users.size() << std::endl;
     for (const auto& user : users) {
-        users_outfile << user->get_username() << "|" << user->get_role() << "|" << user->get_skill_level() << "|" << user->get_password() << std::endl;
+        users_outfile << user->get_username() << "|" << user->get_role() << "|" << user->get_skill_of_member() << "|" << user->get_password() << std::endl;
     }
     users_outfile.close();
 
@@ -30,15 +30,12 @@ void DataPersistence::save_data_to_file(const std::string& users_filename, const
         }
     }
     reservations_outfile.close();
-
-    std::cout << "Data saved." << std::endl;
 }
 
-void DataPersistence::load_data_from_file(const std::string& users_filename, const std::string& reservations_filename, const std::string& reservation_id_filename, std::vector<std::shared_ptr<User>>& users, int& next_reservation_id, Schedule& schedule) {
+void DataPersistence::load_from_in_file(const std::string& users_filename, const std::string& reservations_filename, const std::string& reservation_id_filename, std::vector<std::shared_ptr<User>>& users, int& next_reservation_id, Schedule& schedule) {
     // Load users
     std::ifstream users_infile(users_filename);
     if (users_infile.peek() != std::ifstream::traits_type::eof()) {
-        std::cout << "Loading users..." << std::endl;
 
         size_t num_users;
         users_infile >> num_users;
@@ -70,7 +67,6 @@ void DataPersistence::load_data_from_file(const std::string& users_filename, con
     // Load reservation ID
     std::ifstream reservation_id_infile(reservation_id_filename);
     if (reservation_id_infile.peek() != std::ifstream::traits_type::eof()) {
-        std::cout << "Loading reservation ID..." << std::endl;
         reservation_id_infile >> next_reservation_id;
     }
     reservation_id_infile.close();
@@ -78,7 +74,6 @@ void DataPersistence::load_data_from_file(const std::string& users_filename, con
     // Load reservations
     std::ifstream reservations_infile(reservations_filename);
     if (reservations_infile.peek() != std::ifstream::traits_type::eof()) {
-        std::cout << "Loading reservations..." << std::endl;
 
         size_t num_courts;
         reservations_infile >> num_courts;
@@ -126,7 +121,5 @@ void DataPersistence::load_data_from_file(const std::string& users_filename, con
         }
     }
     reservations_infile.close();
-
-    std::cout << "Data loaded." << std::endl;
 }
 

@@ -1,16 +1,16 @@
-#include "PickleballReservationSystem.h"
+#include "PickleballReservations.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <memory>
 
-PickleballReservationSystem::PickleballReservationSystem()
-    : users_(), next_reservation_id_(1), schedule_(), logged_in_user_(nullptr) {
+PickleballReservations::PickleballReservations()
+    : users_(), next_reservation_id_(1), schedule_(), current_logged_user(nullptr) {
     // Load data from file (if any)
-    load_data_from_file();
+    load_from_in_file();
 }
 
-User* PickleballReservationSystem::find_user(const std::string& username) {
+User* PickleballReservations::find_user(const std::string& username) {
     for (const auto& user_ptr : users_) {
         if (user_ptr->get_username() == username) {
             return user_ptr.get();
@@ -19,7 +19,7 @@ User* PickleballReservationSystem::find_user(const std::string& username) {
     return nullptr;
 }
 
-ClubOfficer* PickleballReservationSystem::find_officer() {
+ClubOfficer* PickleballReservations::find_officer() {
     for (const auto& user_ptr : users_) {
         if (user_ptr->get_role() == "officer") {
             // return a non-const pointer to the officer
@@ -29,7 +29,7 @@ ClubOfficer* PickleballReservationSystem::find_officer() {
     return nullptr;
 }
 
-ClubOfficer* PickleballReservationSystem::find_officer(const std::string& username) {
+ClubOfficer* PickleballReservations::find_officer(const std::string& username) {
     for (const auto& user_ptr : users_) {
         if (user_ptr->get_username() == username && user_ptr->get_role() == "officer") {
             // return a non-const pointer to the officer
@@ -39,7 +39,7 @@ ClubOfficer* PickleballReservationSystem::find_officer(const std::string& userna
     return nullptr;
 }
 
-void PickleballReservationSystem::add_user(const std::string& username, const std::string& password, const std::string& lowered_role, const std::string& skill_level) {
+void PickleballReservations::add_user(const std::string& username, const std::string& password, const std::string& lowered_role, const std::string& skill_level) {
     if (find_user(username) != nullptr) {
         std::cout << "User already exists" << std::endl;
         return;
@@ -56,17 +56,17 @@ void PickleballReservationSystem::add_user(const std::string& username, const st
     }
 }
 
-void PickleballReservationSystem::increment_user_limits(const User& user, const time_point& time) {
+void PickleballReservations::increment_limit_for_user(const User& user, const time_point& time) {
     if (user.get_role() == "member") {
-        dynamic_cast<ClubMember*>(find_user(user.get_username()))->add_day_played(time);
-        dynamic_cast<ClubMember*>(find_user(user.get_username()))->add_day_played(time);
+        dynamic_cast<ClubMember*>(find_user(user.get_username()))->add_day_member_played(time);
+        dynamic_cast<ClubMember*>(find_user(user.get_username()))->add_day_member_played(time);
     } else if (user.get_role() == "officer") {
-        dynamic_cast<ClubOfficer*>(find_user(user.get_username()))->add_day_played(time);
-        dynamic_cast<ClubOfficer*>(find_user(user.get_username()))->add_day_played(time);
+        dynamic_cast<ClubOfficer*>(find_user(user.get_username()))->add_day_member_played(time);
+        dynamic_cast<ClubOfficer*>(find_user(user.get_username()))->add_day_member_played(time);
     }
 }
 
-void PickleballReservationSystem::decrement_user_limits(const User& user, const time_point& time) { 
+void PickleballReservations::decrement_limit_for_user(const User& user, const time_point& time) { 
     if (user.get_role() == "member") {
         dynamic_cast<ClubMember*>(find_user(user.get_username()))->remove_day_played(time);
         dynamic_cast<ClubMember*>(find_user(user.get_username()))->remove_day_played(time);
@@ -76,19 +76,19 @@ void PickleballReservationSystem::decrement_user_limits(const User& user, const 
     }
 }
 
-void PickleballReservationSystem::display_schedule() const {
+void PickleballReservations::display_schedule() const {
     std::cout << schedule_.display_daily_schedule(std::chrono::system_clock::now()) << std::endl;
 }
 
-void PickleballReservationSystem::view_requests(const ClubOfficer& officer) const {
+void PickleballReservations::show_requests_for_res(const ClubOfficer& officer) const {
     std::cout << officer.print_requests() << std::endl;
 }
 
-void PickleballReservationSystem::view_reservations(const User& user) const {
+void PickleballReservations::show_reservations(const User& user) const {
     std::cout << schedule_.print_user_reservations(user) << std::endl;
 }
 
-void PickleballReservationSystem::reserve_court(const User& user, int court_id,  const std::string& start_date_str, const std::string& start_time_str) {
+void PickleballReservations::reserve_court(const User& user, int court_id,  const std::string& start_date_str, const std::string& start_time_str) {
     // convert start_time
     time_point start_time = string_to_time_point(start_date_str, start_time_str);
     // set end_time to 30 minutes after start_time
@@ -115,7 +115,7 @@ void PickleballReservationSystem::reserve_court(const User& user, int court_id, 
         return;
     }
 
-    if (user.can_reserve_slot(new_reservation)) {
+    if (user.is_slot_open(new_reservation)) {
         // add reservation to schedule
         schedule_.add_reservation_to_court(court_id, new_reservation);
         next_reservation_id_++;
@@ -124,10 +124,10 @@ void PickleballReservationSystem::reserve_court(const User& user, int court_id, 
     }
 
     // if user is member or officer, increment their daily/weekly limits
-    increment_user_limits(user, start_time);
+    increment_limit_for_user(user, start_time);
 }
 
-bool PickleballReservationSystem::delete_reservation(int reservation_id, const User& user) {
+bool PickleballReservations::delete_reservation(int reservation_id, const User& user) {
     // get reservation
     const Reservation* r = schedule_.get_reservation(reservation_id);
     if (r == nullptr) {
@@ -136,7 +136,7 @@ bool PickleballReservationSystem::delete_reservation(int reservation_id, const U
         return false;
     }
 
-    bool cancellation = schedule_.cancel_reservation(reservation_id, user);
+    bool cancellation = schedule_.delete_res(reservation_id, user);
     
     if (cancellation) {
         std::cout << "Reservation " << reservation_id << " cancelled!" << std::endl;
@@ -148,10 +148,10 @@ bool PickleballReservationSystem::delete_reservation(int reservation_id, const U
     }
 
     // if user is member or officer, decrement their daily/weekly limits
-    decrement_user_limits(user, r->get_start_time());
+    decrement_limit_for_user(user, r->get_start_time());
 }
 
-bool PickleballReservationSystem::add_user_to_reservation(int reservation_id, const User& user) {
+bool PickleballReservations::add_user_to_reservation(int reservation_id, const User& user) {
     // get reservation
     const Reservation* r = schedule_.get_reservation(reservation_id);
     if (r == nullptr) {
@@ -172,10 +172,10 @@ bool PickleballReservationSystem::add_user_to_reservation(int reservation_id, co
     }
 
     // if user is member or officer, increment their daily/weekly limits
-    increment_user_limits(user, r->get_start_time());
+    increment_limit_for_user(user, r->get_start_time());
 }
 
-bool PickleballReservationSystem::remove_user_from_reservation(int reservation_id, const User& user) {
+bool PickleballReservations::delete_from_reservation_given_user(int reservation_id, const User& user) {
     // get reservation
     const Reservation* r = schedule_.get_reservation(reservation_id);
     if (r == nullptr) {
@@ -184,7 +184,7 @@ bool PickleballReservationSystem::remove_user_from_reservation(int reservation_i
         return false;
     }
 
-    bool removing = schedule_.remove_user_from_reservation(reservation_id, user);
+    bool removing = schedule_.delete_from_reservation_given_user(reservation_id, user);
 
     if (removing) {
         std::cout << "User " << user.get_username() << " removed from reservation " << reservation_id << std::endl;
@@ -195,10 +195,10 @@ bool PickleballReservationSystem::remove_user_from_reservation(int reservation_i
     }
 
     // if user is member or officer, decrement their daily/weekly limits
-    decrement_user_limits(user, r->get_start_time());
+    decrement_limit_for_user(user, r->get_start_time());
 }
 
-bool PickleballReservationSystem::request_reservation_modification(int reservation_id, const User& requester, ClubOfficer& officer) {
+bool PickleballReservations::request_reservation_modification(int reservation_id, const User& requester, ClubOfficer& officer) {
     // if requester get_role() is a ClubOfficer, return false
     if (requester.get_role() == "ClubOfficer") {
         return false;
@@ -220,15 +220,15 @@ bool PickleballReservationSystem::request_reservation_modification(int reservati
     }
 }
 
-void PickleballReservationSystem::save_data_to_file() const {
-    DataPersistence::save_data_to_file("pickleball_users.txt", "pickleball_reservations.txt", "pickleball_reservation_id.txt", users_, next_reservation_id_, schedule_);
+void PickleballReservations::save_to_out_file() const {
+    DataPersistence::save_to_out_file("pickleball_users.txt", "pickleball_reservations.txt", "pickleball_reservation_id.txt", users_, next_reservation_id_, schedule_);
 }
 
-void PickleballReservationSystem::load_data_from_file() {
-    DataPersistence::load_data_from_file("pickleball_users.txt", "pickleball_reservations.txt", "pickleball_reservation_id.txt", users_, next_reservation_id_, schedule_);
+void PickleballReservations::load_from_in_file() {
+    DataPersistence::load_from_in_file("pickleball_users.txt", "pickleball_reservations.txt", "pickleball_reservation_id.txt", users_, next_reservation_id_, schedule_);
 }
 
-void PickleballReservationSystem::login(const std::string& username, const std::string& password) {
+void PickleballReservations::login(const std::string& username, const std::string& password) {
     // print logging in
     std::cout << "Logging in..." << std::endl;
     // find the user
@@ -239,13 +239,13 @@ void PickleballReservationSystem::login(const std::string& username, const std::
     } else {
         // make sure password is correct
         if (user->authenticate(password)) {
-            logged_in_user_ = user;
+            current_logged_user = user;
         }
     }
 }
 
 // signup(username, password, lowered role, skill_level)
-void PickleballReservationSystem::signup(const std::string& username, const std::string& password, const std::string& lowered_role, const std::string& skill_level) {
+void PickleballReservations::signup(const std::string& username, const std::string& password, const std::string& lowered_role, const std::string& skill_level) {
     // check if username is already taken
     if (find_user(username) != nullptr) {
         std::cout << "Username already taken" << std::endl;
@@ -257,19 +257,19 @@ void PickleballReservationSystem::signup(const std::string& username, const std:
     login(username, password);
 }
 
-void PickleballReservationSystem::logout() {
+void PickleballReservations::logout() {
     std::cout << "Goodbye!" << std::endl;
-    logged_in_user_ = nullptr;
+    current_logged_user = nullptr;
 }
 
-bool PickleballReservationSystem::is_logged_in() const {
-    return logged_in_user_ != nullptr;
+bool PickleballReservations::is_logged_in() const {
+    return current_logged_user != nullptr;
 }
 
-const User* PickleballReservationSystem::get_logged_in_user() const {
-    return logged_in_user_;
+const User* PickleballReservations::get_logged_in_user() const {
+    return current_logged_user;
 }
 
-int PickleballReservationSystem::get_next_reservation_id() const {
+int PickleballReservations::get_next_reservation_id() const {
     return next_reservation_id_;
 }

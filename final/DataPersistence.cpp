@@ -5,7 +5,7 @@
 #include "time_utils.h"
 
 void DataPersistence::save_to_out_file(const std::string& users_filename, const std::string& reservations_filename, const std::string& reservation_id_filename, const std::vector<std::shared_ptr<User>>& users, int next_reservation_id, const Schedule& schedule) {
-    // Save users
+    // this will save the users
     std::ofstream users_outfile(users_filename);
     users_outfile << users.size() << std::endl;
     for (const auto& user : users) {
@@ -13,12 +13,12 @@ void DataPersistence::save_to_out_file(const std::string& users_filename, const 
     }
     users_outfile.close();
 
-    // Save reservation ID
+    // res id will be saved
     std::ofstream reservation_id_outfile(reservation_id_filename);
     reservation_id_outfile << next_reservation_id << std::endl;
     reservation_id_outfile.close();
 
-    // Save reservations
+    // reservations will be saved
     std::ofstream reservations_outfile(reservations_filename);
     const auto& courts = schedule.get_courts();
     reservations_outfile << courts.size() << std::endl;
@@ -64,25 +64,25 @@ void DataPersistence::load_from_in_file(const std::string& users_filename, const
     }
     users_infile.close();
 
-    // Load reservation ID
+    // to load res id
     std::ifstream reservation_id_infile(reservation_id_filename);
     if (reservation_id_infile.peek() != std::ifstream::traits_type::eof()) {
         reservation_id_infile >> next_reservation_id;
     }
     reservation_id_infile.close();
 
-    // Load reservations
+    // res load
     std::ifstream reservations_infile(reservations_filename);
     if (reservations_infile.peek() != std::ifstream::traits_type::eof()) {
 
         size_t num_courts;
         reservations_infile >> num_courts;
-        reservations_infile.ignore(); // Ignore newline character
+        reservations_infile.ignore();
 
         for (size_t i = 0; i < num_courts; ++i) {
             size_t num_reservations;
             reservations_infile >> num_reservations;
-            reservations_infile.ignore(); // Ignore newline character
+            reservations_infile.ignore();
 
             for (size_t j = 0; j < num_reservations; ++j) {
                 std::string line;
@@ -99,13 +99,13 @@ void DataPersistence::load_from_in_file(const std::string& users_filename, const
                 std::vector<std::string> players;
 
                 ss >> id;
-                ss.ignore(3, '|'); // Ignore " | "
+                ss.ignore(3, '|'); 
                 ss >> user;
-                ss.ignore(3, '|'); // Ignore " | "
+                ss.ignore(3, '|'); 
                 ss >> start_date_str;
-                ss.ignore(3, '|'); // Ignore " | "
+                ss.ignore(3, '|'); 
                 ss >> start_time_str;
-                ss.ignore(3, '|'); // Ignore " | "
+                ss.ignore(3, '|');
 
                 while (std::getline(ss, player, ',')) {
                     players.push_back(player);
